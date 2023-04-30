@@ -15,7 +15,8 @@ class RuleProvider : RuleSetProvider {
             ruleSetId,
             listOf(
                 InterfaceName(config),
-                TypeParameterName(config)
+                TypeParameterName(config),
+                InternalVisibility(config)
             )
         )
     }
