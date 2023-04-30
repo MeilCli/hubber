@@ -1,0 +1,37 @@
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+
+plugins {
+    id 'com.android.application' version '8.0.0' apply false
+    id 'com.android.library' version '8.0.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.21' apply false
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0' apply false
+}
+
+tasks.register("detekt", ReportMergeTask) { mergeTask ->
+    group = "hubber"
+    mergeTask.output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+    gradle.includedBuilds.forEach { includeBuild ->
+        mergeTask.dependsOn includeBuild.task(":detekt")
+        mergeTask.input.from(new File(includeBuild.projectDir, "build/reports/detekt/merge.xml"))
+    }
+}
+
+tasks.register("check") {
+    group = "hubber"
+    dependsOn gradle.includedBuilds*.task(":check")
+}
+
+tasks.register("clean") {
+    group = "hubber"
+    dependsOn gradle.includedBuilds*.task(":clean")
+}
+
+tasks.register("assemble") {
+    group = "hubber"
+    dependsOn gradle.includedBuilds*.task(":assemble")
+}
+
+tasks.register("testAll") {
+    group = "hubber"
+    dependsOn gradle.includedBuilds*.task(":testAll")
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="DetektPluginSettings">
+        <option name="configurationFilePaths">
+            <set>
+                <option value="$PROJECT_DIR$/detekt.yml" />
+            </set>
+        </option>
+        <option name="configurationFiles">
+            <list>
+                <option value="$PROJECT_DIR$/detekt.yml" />
+            </list>
+        </option>
+        <option name="enableFormatting" value="true" />
+        <option name="pluginJarPaths">
+            <set>
+                <option value="$PROJECT_DIR$/toolchain/detekt-rule/build/libs/toolchain-detekt-rule.jar" />
+            </set>
+        </option>
+        <option name="pluginJars">
+            <list>
+                <option value="$PROJECT_DIR$/toolchain/detekt-rule/build/libs/toolchain-detekt-rule.jar" />
+            </list>
+        </option>
+    </component>
+</project>

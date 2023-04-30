@@ -1,0 +1,42 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'io.gitlab.arturbosch.detekt'
+    id 'net.meilcli.hubber.toolchain.dependencies'
+}
+
+import net.meilcli.hubber.config.Dependencies
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    implementation project(':core')
+    implementation platform(Dependencies.OrgJetbrainsKotlin.KotlinBom)
+    implementation Dependencies.OrgJetbrainsKotlin.KotlinGradlePlugin
+    implementation Dependencies.OrgJetbrainsKotlin.KotlinStdlibJdk8
+    implementation Dependencies.ComAndroidToolsBuild.Gradle
+
+    detektPlugins Dependencies.IoGitlabArturboschDetekt.DetektFormatting
+}
+
+gradlePlugin {
+    plugins {
+        application {
+            id = 'net.meilcli.hubber.toolchain.config.android-application'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidApplicationPlugin'
+        }
+        library {
+            id = 'net.meilcli.hubber.toolchain.config.android-library'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidLibraryPlugin'
+        }
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config = files("../../../detekt.yml")
+    basePath = file("../../../")
+}

@@ -1,0 +1,66 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0'
+    id 'net.meilcli.hubber.toolchain.generator.dependencies'
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    implementation platform('org.jetbrains.kotlin:kotlin-bom')
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin'
+
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0"
+
+    library 'org.jetbrains.kotlin:kotlin-bom'
+    library 'org.jetbrains.kotlin:kotlin-gradle-plugin'
+    library 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    library 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
+
+    library 'io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0'
+    library 'io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0'
+    library 'io.gitlab.arturbosch.detekt:detekt-api:1.22.0'
+    library 'io.gitlab.arturbosch.detekt:detekt-test:1.22.0'
+    library 'toolchain-detekt-rule:toolchain-detekt-rule'
+
+    library 'com.android.tools.build:gradle:8.0.0'
+    library 'androidx.appcompat:appcompat:1.5.1'
+
+    library 'junit:junit:4.13.2'
+
+    library 'io.mockk:mockk:1.13.5'
+
+    library 'androidx.test.ext:junit:1.1.4'
+    library 'androidx.test.espresso:espresso-core:3.5.0'
+}
+
+gradlePlugin {
+    plugins {
+        dependencies {
+            id = 'net.meilcli.hubber.toolchain.dependencies'
+            implementationClass = 'net.meilcli.hubber.toolchain.dependencies.DependenciesPlugin'
+        }
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config = files("../../detekt.yml")
+    basePath = file("../../")
+}
+
+tasks.named("detekt").configure {
+    reports {
+        // for root detekt task, its task extracts merge.xml
+        xml.outputLocation.set(file("build/reports/detekt/merge.xml"))
+    }
+}
+
+tasks.register("testAll") {
+    dependsOn ':test'
+}

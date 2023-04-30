@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/toolchain/generator" name="toolchain-generator">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/generator" />
+                  <project path="$PROJECT_DIR$/toolchain/generator/dependencies" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/toolchain/dependencies" name="toolchain-dependencies">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/dependencies" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/toolchain/detekt-rule" name="toolchain-detekt-rule">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/detekt-rule" />
+                </projects>
+              </build>
+              <build path="$PROJECT_DIR$/toolchain/config" name="toolchain-config">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/config" />
+                  <project path="$PROJECT_DIR$/toolchain/config/android" />
+                  <project path="$PROJECT_DIR$/toolchain/config/core" />
+                  <project path="$PROJECT_DIR$/toolchain/config/jvm" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/toolchain/config" />
+            <option value="$PROJECT_DIR$/toolchain/config/android" />
+            <option value="$PROJECT_DIR$/toolchain/config/core" />
+            <option value="$PROJECT_DIR$/toolchain/config/jvm" />
+            <option value="$PROJECT_DIR$/toolchain/dependencies" />
+            <option value="$PROJECT_DIR$/toolchain/detekt-rule" />
+            <option value="$PROJECT_DIR$/toolchain/generator" />
+            <option value="$PROJECT_DIR$/toolchain/generator/dependencies" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

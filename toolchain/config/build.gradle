@@ -1,0 +1,51 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.21' apply false
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0' apply false
+}
+
+def reportMerge = tasks.register("detekt", ReportMergeTask) {
+    output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
+}
+
+subprojects {
+    afterEvaluate {
+        plugins.withType(DetektPlugin) {
+            tasks.withType(Detekt) { detektTask ->
+                finalizedBy(reportMerge)
+
+                reportMerge.configure { mergeTask ->
+                    mergeTask.input.from(detektTask.xmlReportFile)
+                    mergeTask.dependsOn(detektTask)
+                }
+            }
+        }
+    }
+}
+
+tasks.register("check") {
+    dependsOn ':core:check'
+    dependsOn ':jvm:check'
+    dependsOn ':android:check'
+}
+
+tasks.register("clean") {
+    dependsOn ':core:clean'
+    dependsOn ':jvm:clean'
+    dependsOn ':android:clean'
+}
+
+tasks.register("assemble") {
+    dependsOn ':core:assemble'
+    dependsOn ':jvm:assemble'
+    dependsOn ':android:assemble'
+}
+
+tasks.register("testAll") {
+    dependsOn ':core:test'
+    dependsOn ':jvm:test'
+    dependsOn ':android:test'
+}

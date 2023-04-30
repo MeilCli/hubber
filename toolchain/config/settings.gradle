@@ -1,0 +1,8 @@
+pluginManagement {
+    includeBuild '../dependencies'
+}
+
+rootProject.name = 'toolchain-config'
+include(":core")
+include(":jvm")
+include(":android")
