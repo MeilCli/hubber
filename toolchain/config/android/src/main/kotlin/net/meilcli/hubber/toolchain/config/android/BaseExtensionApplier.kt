@@ -8,6 +8,7 @@ object BaseExtensionApplier {
     private const val compileSdkVersion = 33
     private const val minSdkVersion = 24
     private const val targetSdkVersion = 33
+    private const val composeCompiler = "1.4.6"
 
     fun apply(extension: BaseExtension) {
         extension.compileSdkVersion(compileSdkVersion)
@@ -28,5 +29,13 @@ object BaseExtensionApplier {
             it.setSourceCompatibility(JavaVersion.VERSION_1_8)
             it.setTargetCompatibility(JavaVersion.VERSION_1_8)
         }
+
+        setupCompose(extension)
+    }
+
+    @Suppress("UnstableApiUsage")
+    private fun setupCompose(extension: BaseExtension) {
+        extension.buildFeatures.compose = true
+        extension.composeOptions.kotlinCompilerExtensionVersion = composeCompiler
     }
 }

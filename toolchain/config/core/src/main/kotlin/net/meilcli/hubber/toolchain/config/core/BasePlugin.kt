@@ -13,6 +13,10 @@ abstract class BasePlugin : Plugin<Project> {
         add("implementation", dependency)
     }
 
+    protected fun DependencyHandler.debugImplementation(dependency: String) {
+        add("debugImplementation", dependency)
+    }
+
     protected fun DependencyHandler.testImplementation(dependency: String) {
         add("testImplementation", dependency)
     }
