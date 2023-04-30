@@ -7,6 +7,14 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
+              <build path="$PROJECT_DIR$/toolchain/config" name="toolchain-config">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/config" />
+                  <project path="$PROJECT_DIR$/toolchain/config/android" />
+                  <project path="$PROJECT_DIR$/toolchain/config/core" />
+                  <project path="$PROJECT_DIR$/toolchain/config/jvm" />
+                </projects>
+              </build>
               <build path="$PROJECT_DIR$/toolchain/generator" name="toolchain-generator">
                 <projects>
                   <project path="$PROJECT_DIR$/toolchain/generator" />
@@ -21,14 +29,6 @@
               <build path="$PROJECT_DIR$/toolchain/detekt-rule" name="toolchain-detekt-rule">
                 <projects>
                   <project path="$PROJECT_DIR$/toolchain/detekt-rule" />
-                </projects>
-              </build>
-              <build path="$PROJECT_DIR$/toolchain/config" name="toolchain-config">
-                <projects>
-                  <project path="$PROJECT_DIR$/toolchain/config" />
-                  <project path="$PROJECT_DIR$/toolchain/config/android" />
-                  <project path="$PROJECT_DIR$/toolchain/config/core" />
-                  <project path="$PROJECT_DIR$/toolchain/config/jvm" />
                 </projects>
               </build>
             </builds>
