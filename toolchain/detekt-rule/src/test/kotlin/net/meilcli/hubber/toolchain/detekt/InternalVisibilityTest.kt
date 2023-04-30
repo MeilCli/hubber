@@ -60,6 +60,19 @@ class InternalVisibilityTest {
     }
 
     @Test
+    fun testWarning_whenPublicConstant() {
+        val findings = InternalVisibility(Config.empty).compileAndLint(
+            """
+                package net.meilcli.hubber.detekt.internal
+
+                const val message = "hello world"
+            """.trimIndent()
+        )
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun testWarning_whenPublicFunction() {
         val findings = InternalVisibility(Config.empty).compileAndLint(
             """
