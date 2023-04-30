@@ -41,6 +41,9 @@ dependencies {
     library 'androidx.compose.ui:ui-test-junit4'
     library 'androidx.compose.ui:ui-test-manifest'
 
+    library 'com.google.dagger:hilt-android:2.44'
+    library 'com.google.dagger:hilt-compiler:2.44'
+
     library 'junit:junit:4.13.2'
 
     library 'io.mockk:mockk:1.13.5'

@@ -1,9 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
     id 'io.gitlab.arturbosch.detekt'
     id 'net.meilcli.hubber.toolchain.config.detekt'
     id 'net.meilcli.hubber.toolchain.config.android-application'
+    id 'net.meilcli.hubber.toolchain.config.dagger'
 }
 
 android {

@@ -32,6 +32,10 @@ gradlePlugin {
             id = 'net.meilcli.hubber.toolchain.config.android-library'
             implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidLibraryPlugin'
         }
+        dagger {
+            id = 'net.meilcli.hubber.toolchain.config.dagger'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.DaggerPlugin'
+        }
     }
 }
 

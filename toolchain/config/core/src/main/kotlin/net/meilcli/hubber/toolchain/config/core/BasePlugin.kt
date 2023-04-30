@@ -25,6 +25,10 @@ abstract class BasePlugin : Plugin<Project> {
         add("androidTestImplementation", dependency)
     }
 
+    protected fun DependencyHandler.kapt(dependency: String) {
+        add("kapt", dependency)
+    }
+
     override fun apply(project: Project) {
         project.repositories.applyRepositories()
         project.dependencies.applyDependencies()
