@@ -1,0 +1,11 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'io.gitlab.arturbosch.detekt'
+    id 'net.meilcli.hubber.toolchain.config.android-library'
+    id 'net.meilcli.hubber.toolchain.config.detekt'
+}
+
+android {
+    namespace 'net.meilcli.hubber.core.data.main'
+}

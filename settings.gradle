@@ -8,8 +8,21 @@ pluginManagement {
 }
 
 rootProject.name = "hubber"
+
 includeBuild('toolchain/generator')
 includeBuild('toolchain/dependencies')
 includeBuild('toolchain/detekt-rule')
 includeBuild('toolchain/config')
+
 include ':app'
+
+for (domain in file("domain").listFiles()) {
+    for (layer in domain.listFiles()) {
+        for (module in layer.listFiles()) {
+            def buildGradle = new File(module, "build.gradle")
+            if (buildGradle.exists()) {
+                include ":domain:${domain.name}:${layer.name}:${module.name}"
+            }
+        }
+    }
+}

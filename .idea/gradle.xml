@@ -41,6 +41,12 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/core" />
+            <option value="$PROJECT_DIR$/domain/core/data" />
+            <option value="$PROJECT_DIR$/domain/core/data/main" />
+            <option value="$PROJECT_DIR$/domain/core/ui" />
+            <option value="$PROJECT_DIR$/domain/core/ui/main" />
             <option value="$PROJECT_DIR$/toolchain/config" />
             <option value="$PROJECT_DIR$/toolchain/config/android" />
             <option value="$PROJECT_DIR$/toolchain/config/core" />
