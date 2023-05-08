@@ -43,10 +43,17 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/core" />
+            <option value="$PROJECT_DIR$/domain/core/contract" />
+            <option value="$PROJECT_DIR$/domain/core/contract/main" />
             <option value="$PROJECT_DIR$/domain/core/data" />
             <option value="$PROJECT_DIR$/domain/core/data/main" />
             <option value="$PROJECT_DIR$/domain/core/ui" />
             <option value="$PROJECT_DIR$/domain/core/ui/main" />
+            <option value="$PROJECT_DIR$/domain/splash" />
+            <option value="$PROJECT_DIR$/domain/splash/contract" />
+            <option value="$PROJECT_DIR$/domain/splash/contract/main" />
+            <option value="$PROJECT_DIR$/domain/splash/ui" />
+            <option value="$PROJECT_DIR$/domain/splash/ui/main" />
             <option value="$PROJECT_DIR$/toolchain/config" />
             <option value="$PROJECT_DIR$/toolchain/config/android" />
             <option value="$PROJECT_DIR$/toolchain/config/core" />

@@ -18,6 +18,7 @@ dependencies {
     implementation Dependencies.OrgJetbrainsKotlin.KotlinGradlePlugin
     implementation Dependencies.OrgJetbrainsKotlin.KotlinStdlibJdk8
     implementation Dependencies.ComAndroidToolsBuild.Gradle
+    implementation Dependencies.ComGoogleDevtoolsKsp.SymbolProcessingGradlePlugin
 
     detektPlugins Dependencies.IoGitlabArturboschDetekt.DetektFormatting
 }
@@ -44,9 +45,25 @@ gradlePlugin {
             id = 'net.meilcli.hubber.toolchain.config.module.core.data'
             implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.CoreDataModulePlugin'
         }
+        coreContract {
+            id = 'net.meilcli.hubber.toolchain.config.module.core.contract'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.CoreContractModulePlugin'
+        }
         coreUi {
             id = 'net.meilcli.hubber.toolchain.config.module.core.ui'
             implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.CoreUiModulePlugin'
+        }
+        someData {
+            id = 'net.meilcli.hubber.toolchain.config.module.some.data'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.SomeDataModulePlugin'
+        }
+        someContract {
+            id = 'net.meilcli.hubber.toolchain.config.module.some.contract'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.SomeContractModulePlugin'
+        }
+        someUi {
+            id = 'net.meilcli.hubber.toolchain.config.module.some.ui'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.SomeUiModulePlugin'
         }
     }
 }
