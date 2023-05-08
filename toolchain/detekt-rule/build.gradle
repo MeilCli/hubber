@@ -40,3 +40,7 @@ tasks.named("detekt").configure {
 tasks.register("testAll") {
     dependsOn ':test'
 }
+
+tasks.withType(org.gradle.jvm.tasks.Jar) {
+    destinationDirectory = file("$projectDir/jar")
+}
