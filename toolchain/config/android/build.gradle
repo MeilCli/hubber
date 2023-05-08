@@ -25,12 +25,8 @@ dependencies {
 gradlePlugin {
     plugins {
         application {
-            id = 'net.meilcli.hubber.toolchain.config.android-application'
-            implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidApplicationPlugin'
-        }
-        library {
-            id = 'net.meilcli.hubber.toolchain.config.android-library'
-            implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidLibraryPlugin'
+            id = 'net.meilcli.hubber.toolchain.config.android'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.AndroidPlugin'
         }
         dagger {
             id = 'net.meilcli.hubber.toolchain.config.dagger'
@@ -39,6 +35,18 @@ gradlePlugin {
         ksp {
             id = 'net.meilcli.hubber.toolchain.config.ksp'
             implementationClass = 'net.meilcli.hubber.toolchain.config.android.KspPlugin'
+        }
+        app {
+            id = 'net.meilcli.hubber.toolchain.config.module.app'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.AppModulePlugin'
+        }
+        coreData {
+            id = 'net.meilcli.hubber.toolchain.config.module.core.data'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.CoreDataModulePlugin'
+        }
+        coreUi {
+            id = 'net.meilcli.hubber.toolchain.config.module.core.ui'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.module.CoreUiModulePlugin'
         }
     }
 }

@@ -1,28 +1,8 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
-    id 'com.google.dagger.hilt.android'
-    id 'com.google.devtools.ksp'
-    id 'io.gitlab.arturbosch.detekt'
-    id 'net.meilcli.hubber.toolchain.config.detekt'
-    id 'net.meilcli.hubber.toolchain.config.android-application'
-    id 'net.meilcli.hubber.toolchain.config.dagger'
+    id 'net.meilcli.hubber.toolchain.dependencies'
+    id 'net.meilcli.hubber.toolchain.config.module.app'
 }
 
 android {
     namespace 'net.meilcli.hubber'
-}
-
-dependencies {
-    for (domain in file("../domain").listFiles()) {
-        for (layer in domain.listFiles()) {
-            for (module in layer.listFiles()) {
-                def buildGradle = new File(module, "build.gradle")
-                if (buildGradle.exists()) {
-                    implementation project(":domain:${domain.name}:${layer.name}:${module.name}")
-                }
-            }
-        }
-    }
 }

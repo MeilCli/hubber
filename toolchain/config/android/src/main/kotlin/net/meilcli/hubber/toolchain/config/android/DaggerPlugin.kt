@@ -2,6 +2,8 @@ package net.meilcli.hubber.toolchain.config.android
 
 import net.meilcli.hubber.config.Dependencies
 import net.meilcli.hubber.toolchain.config.core.BasePlugin
+import net.meilcli.hubber.toolchain.config.core.implementation
+import net.meilcli.hubber.toolchain.config.core.kapt
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
