@@ -36,6 +36,10 @@ gradlePlugin {
             id = 'net.meilcli.hubber.toolchain.config.dagger'
             implementationClass = 'net.meilcli.hubber.toolchain.config.android.DaggerPlugin'
         }
+        ksp {
+            id = 'net.meilcli.hubber.toolchain.config.ksp'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.android.KspPlugin'
+        }
     }
 }
 

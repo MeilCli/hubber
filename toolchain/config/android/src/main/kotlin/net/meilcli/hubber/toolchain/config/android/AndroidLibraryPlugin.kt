@@ -6,7 +6,6 @@ import net.meilcli.hubber.toolchain.config.core.BasePlugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.artifacts.dsl.RepositoryHandler
-import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class AndroidLibraryPlugin : BasePlugin() {
@@ -17,14 +16,14 @@ class AndroidLibraryPlugin : BasePlugin() {
         project.extensions
             .findByType(LibraryExtension::class.java)
             ?.let { BaseExtensionApplier.apply(it) }
-        project.extensions
-            .findByType(KotlinProjectExtension::class.java)
-            ?.jvmToolchain(8)
-        project.tasks
-            .withType(KotlinCompile::class.java)
-            .forEach {
-                it.kotlinOptions.jvmTarget = "1.8"
-            }
+        project.afterEvaluate {
+            // afterEvaluate reason is that other plugin will set JDK version to other(in using kapt and ksp case)
+            project.tasks
+                .withType(KotlinCompile::class.java)
+                .forEach {
+                    it.kotlinOptions.jvmTarget = "1.8"
+                }
+        }
     }
 
     override fun RepositoryHandler.applyRepositories() {
