@@ -45,3 +45,6 @@ naming:
     constantPattern: '^[a-z]+[0-9]*([A-Z][a-z0-9]+)*[A-Z]?$'
     propertyPattern: '^[a-z]+[0-9]*([A-Z][a-z0-9]+)*[A-Z]?$'
     privatePropertyPattern: '^_?[a-z]+[0-9]*([A-Z][a-z0-9]+)*[A-Z]?$'
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable

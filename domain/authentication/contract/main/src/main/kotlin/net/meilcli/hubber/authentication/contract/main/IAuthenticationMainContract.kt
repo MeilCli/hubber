@@ -1,4 +1,4 @@
-package net.meilcli.hubber.splash.contract.main
+package net.meilcli.hubber.authentication.contract.main
 
 import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.annotation.Destination
@@ -6,15 +6,15 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import net.meilcli.hubber.core.contract.main.IContract
 
-interface ISplashMainContract : IContract {
+interface IAuthenticationMainContract : IContract {
 
     @Composable
-    fun SplashPage(navigator: DestinationsNavigator)
+    fun LoginMethodSelectPage(navigator: DestinationsNavigator)
 }
 
 @Destination
 @RootNavGraph(start = true)
 @Composable
-fun SplashPage(contract: ISplashMainContract, navigator: DestinationsNavigator) {
-    contract.SplashPage(navigator)
+fun LoginMethodSelectPage(contract: IAuthenticationMainContract, navigator: DestinationsNavigator) {
+    contract.LoginMethodSelectPage(navigator)
 }

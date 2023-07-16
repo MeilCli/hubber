@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import net.meilcli.hubber.core.contract.main.Contracts
 
@@ -22,6 +23,7 @@ abstract class HubberActivity : AppCompatActivity() {
                     contracts.value.forEach {
                         it.addDependency(this)
                     }
+                    this.dependency(contracts)
                 }
             )
         }

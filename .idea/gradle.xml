@@ -42,6 +42,13 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/authentication" />
+            <option value="$PROJECT_DIR$/domain/authentication/contract" />
+            <option value="$PROJECT_DIR$/domain/authentication/contract/main" />
+            <option value="$PROJECT_DIR$/domain/authentication/data" />
+            <option value="$PROJECT_DIR$/domain/authentication/data/main" />
+            <option value="$PROJECT_DIR$/domain/authentication/ui" />
+            <option value="$PROJECT_DIR$/domain/authentication/ui/main" />
             <option value="$PROJECT_DIR$/domain/core" />
             <option value="$PROJECT_DIR$/domain/core/contract" />
             <option value="$PROJECT_DIR$/domain/core/contract/main" />
