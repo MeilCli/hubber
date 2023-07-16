@@ -20,6 +20,7 @@ abstract class BaseContractModulePlugin : BasePlugin() {
         plugins.apply("com.android.library")
         plugins.apply("org.jetbrains.kotlin.android")
         plugins.apply("org.jetbrains.kotlin.kapt")
+        plugins.apply("org.jetbrains.kotlin.plugin.parcelize")
         plugins.apply("com.google.dagger.hilt.android")
         plugins.apply("com.google.devtools.ksp")
         plugins.apply("io.gitlab.arturbosch.detekt")

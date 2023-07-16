@@ -2,7 +2,3 @@ plugins {
     id 'net.meilcli.hubber.toolchain.dependencies'
     id 'net.meilcli.hubber.toolchain.config.module.core.data'
 }
-
-dependencies {
-    implementation project(':domain:core:data:source')
-}

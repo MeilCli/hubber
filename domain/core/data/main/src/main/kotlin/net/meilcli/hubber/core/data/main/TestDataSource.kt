@@ -4,12 +4,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import net.meilcli.hubber.core.data.main.internal.cache.TestCache
+import net.meilcli.hubber.core.data.main.internal.memory.TestMemoryStorage
+import net.meilcli.hubber.core.data.source.memory.IMemoryStorageContainer
 import javax.inject.Singleton
 
 interface ITestDataSource {
 
-    fun hello(): String
+    suspend fun updateMessage(message: String)
+
+    suspend fun getMessage(): String
 }
 
 @Module
@@ -18,7 +21,9 @@ object TestDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideTestDataSource(): ITestDataSource {
-        return TestCache()
+    fun provideTestDataSource(
+        memoryStorageContainer: IMemoryStorageContainer
+    ): ITestDataSource {
+        return TestMemoryStorage(memoryStorageContainer)
     }
 }

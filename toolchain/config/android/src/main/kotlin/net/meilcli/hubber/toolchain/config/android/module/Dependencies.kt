@@ -13,9 +13,16 @@ import java.io.File
 fun DependencyHandler.setupKotlin() {
     implementation(platform(Dependencies.OrgJetbrainsKotlin.KotlinBom))
     implementation(Dependencies.OrgJetbrainsKotlin.KotlinStdlibJdk8)
+    implementation(Dependencies.OrgJetbrainsKotlinx.KotlinxCoroutinesCore)
+    testImplementation(Dependencies.OrgJetbrainsKotlinx.KotlinxCoroutinesTest)
 }
 
 fun DependencyHandler.setupAndroidData() {
+    implementation(Dependencies.AndroidxRoom.RoomRuntime)
+    ksp(Dependencies.AndroidxRoom.RoomCompiler)
+    testImplementation(Dependencies.AndroidxRoom.RoomTesting)
+    implementation(Dependencies.AndroidxDatastore.DatastorePreferences)
+
     implementation(platform(Dependencies.AndroidxCompose.ComposeBom))
     implementation(Dependencies.AndroidxComposeRuntime.Runtime)
 }
@@ -32,6 +39,8 @@ fun DependencyHandler.setupAndroidContract() {
 }
 
 fun DependencyHandler.setupAndroidUi() {
+    implementation(Dependencies.OrgJetbrainsKotlinx.KotlinxCoroutinesAndroid)
+
     implementation(Dependencies.AndroidxAppcompat.Appcompat)
     implementation(Dependencies.AndroidxActivity.ActivityCompose)
     implementation(Dependencies.AndroidxLifecycle.LifecycleViewmodelCompose)
@@ -42,6 +51,7 @@ fun DependencyHandler.setupAndroidUi() {
     implementation(Dependencies.AndroidxComposeUi.Ui)
     implementation(Dependencies.AndroidxComposeUi.UiToolingPreview)
     implementation(Dependencies.AndroidxNavigation.NavigationCompose)
+    implementation(Dependencies.AndroidxHilt.HiltNavigationCompose)
     debugImplementation(Dependencies.AndroidxComposeUi.UiTooling)
     debugImplementation(Dependencies.AndroidxComposeUi.UiTestManifest)
 
@@ -53,9 +63,11 @@ fun DependencyHandler.setupAndroidUi() {
 
 fun DependencyHandler.setupTest() {
     testImplementation(Dependencies.Junit.Junit)
+    testImplementation(Dependencies.ComGoogleTruth.Truth)
 
     androidTestImplementation(Dependencies.AndroidxTestExt.Junit)
     androidTestImplementation(Dependencies.AndroidxTestEspresso.EspressoCore)
+    androidTestImplementation(Dependencies.ComGoogleTruth.Truth)
 }
 
 @Suppress("detekt.NestedBlockDepth")

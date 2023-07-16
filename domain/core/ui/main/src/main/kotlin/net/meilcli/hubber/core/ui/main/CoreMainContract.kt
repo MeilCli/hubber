@@ -1,12 +1,12 @@
 package net.meilcli.hubber.core.ui.main
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.navigation.DependenciesContainerBuilder
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import net.meilcli.hubber.core.contract.main.CoreMainNavGraph
 import net.meilcli.hubber.core.contract.main.ICoreMainContract
+import net.meilcli.hubber.core.ui.main.test.page.TestPage
 
 class CoreMainContract : ICoreMainContract {
 
@@ -21,6 +21,6 @@ class CoreMainContract : ICoreMainContract {
 
     @Composable
     override fun CoreDummyPage() {
-        Text(text = "CoreDummy")
+        TestPage()
     }
 }

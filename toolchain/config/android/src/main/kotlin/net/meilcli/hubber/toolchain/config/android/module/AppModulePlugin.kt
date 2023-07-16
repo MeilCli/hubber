@@ -28,6 +28,8 @@ class AppModulePlugin : BasePlugin() {
 
     override fun DependencyHandler.applyDependencies() {
         setupKotlin()
+        setupAndroidData()
+        setupAndroidContract()
         setupAndroidUi()
         setupTest()
     }

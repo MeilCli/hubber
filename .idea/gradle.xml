@@ -47,6 +47,7 @@
             <option value="$PROJECT_DIR$/domain/core/contract/main" />
             <option value="$PROJECT_DIR$/domain/core/data" />
             <option value="$PROJECT_DIR$/domain/core/data/main" />
+            <option value="$PROJECT_DIR$/domain/core/data/source" />
             <option value="$PROJECT_DIR$/domain/core/ui" />
             <option value="$PROJECT_DIR$/domain/core/ui/main" />
             <option value="$PROJECT_DIR$/domain/splash" />
