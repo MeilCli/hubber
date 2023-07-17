@@ -7,5 +7,8 @@ interface IContract {
 
     val navGraph: NavGraphSpec
 
+    val internalNavGraph: NavGraphSpec?
+        get() = null
+
     fun <T> addDependency(dependenciesContainerBuilder: DependenciesContainerBuilder<T>)
 }

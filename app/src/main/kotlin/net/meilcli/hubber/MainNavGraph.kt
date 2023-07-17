@@ -13,5 +13,6 @@ object MainNavGraph : NavGraphSpec {
 
     override val startRoute: Route = SplashMainNavGraph
 
-    override val nestedNavGraphs: List<NavGraphSpec> = MainContracts.value.map { it.navGraph }
+    override val nestedNavGraphs: List<NavGraphSpec> = MainContracts.value.map { it.navGraph } +
+        MainContracts.value.mapNotNull { it.internalNavGraph }
 }

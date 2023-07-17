@@ -56,6 +56,7 @@ fun DependencyHandler.setupAndroidUi() {
     debugImplementation(Dependencies.AndroidxComposeUi.UiTestManifest)
 
     implementation(Dependencies.IoGithubRaamcostaComposeDestinations.Core)
+    ksp(Dependencies.IoGithubRaamcostaComposeDestinations.Ksp)
 
     androidTestImplementation(platform(Dependencies.AndroidxCompose.ComposeBom))
     androidTestImplementation(Dependencies.AndroidxComposeUi.UiTestJunit4)

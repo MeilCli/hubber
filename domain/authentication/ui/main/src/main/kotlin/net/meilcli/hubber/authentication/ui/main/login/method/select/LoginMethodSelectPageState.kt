@@ -4,10 +4,12 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import net.meilcli.hubber.authentication.ui.main.destinations.LoginPageDestination
 import net.meilcli.hubber.core.ui.main.extensions.popBackStackOrFinishActivity
 
 data class LoginMethodSelectPageState(
     val authenticateAsGuest: () -> Unit,
+    val authenticateAsUser: () -> Unit,
     val backNavigation: () -> Unit
 )
 
@@ -20,6 +22,7 @@ fun rememberLoginMethodSelectPageState(
     return remember(pageViewModel, navigator, onBackPressedDispatcher) {
         LoginMethodSelectPageState(
             authenticateAsGuest = pageViewModel::authenticateAsGuest,
+            authenticateAsUser = { navigator.navigate(LoginPageDestination) },
             backNavigation = { navigator.popBackStackOrFinishActivity(onBackPressedDispatcher) }
         )
     }

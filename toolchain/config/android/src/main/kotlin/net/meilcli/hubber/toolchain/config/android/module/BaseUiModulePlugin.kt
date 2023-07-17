@@ -1,8 +1,10 @@
 package net.meilcli.hubber.toolchain.config.android.module
 
+import com.google.devtools.ksp.gradle.KspExtension
 import net.meilcli.hubber.toolchain.config.core.BasePlugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.configurationcache.extensions.capitalized
 
 abstract class BaseUiModulePlugin : BasePlugin() {
 
@@ -11,6 +13,7 @@ abstract class BaseUiModulePlugin : BasePlugin() {
         super.apply(project)
 
         AndroidNamespace.apply(project)
+        project.applyNavigationDestinations()
         project.implementationDataModulesOfSameDomain()
         project.implementationContractModulesOfAllDomain()
     }
@@ -21,10 +24,22 @@ abstract class BaseUiModulePlugin : BasePlugin() {
         plugins.apply("org.jetbrains.kotlin.kapt")
         plugins.apply("org.jetbrains.kotlin.plugin.parcelize")
         plugins.apply("com.google.dagger.hilt.android")
+        plugins.apply("com.google.devtools.ksp")
         plugins.apply("io.gitlab.arturbosch.detekt")
         plugins.apply("net.meilcli.hubber.toolchain.config.android")
         plugins.apply("net.meilcli.hubber.toolchain.config.detekt")
         plugins.apply("net.meilcli.hubber.toolchain.config.dagger")
+        plugins.apply("net.meilcli.hubber.toolchain.config.ksp")
+    }
+
+    private fun Project.applyNavigationDestinations() {
+        val moduleName = project.projectDir.name
+        val domainName = project.projectDir.parentFile.parentFile.name
+        extensions.findByType(KspExtension::class.java)
+            ?.also {
+                it.arg("compose-destinations.mode", "navgraphs")
+                it.arg("compose-destinations.moduleName", "${domainName.capitalized()}${moduleName.capitalized()}Internal")
+            }
     }
 
     override fun DependencyHandler.applyDependencies() {
