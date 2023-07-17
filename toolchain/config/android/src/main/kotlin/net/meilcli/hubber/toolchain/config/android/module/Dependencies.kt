@@ -18,6 +18,8 @@ fun DependencyHandler.setupKotlin() {
 }
 
 fun DependencyHandler.setupAndroidData() {
+    implementation(Dependencies.OrgJetbrainsKotlinx.KotlinxSerializationJson)
+
     implementation(Dependencies.AndroidxRoom.RoomRuntime)
     ksp(Dependencies.AndroidxRoom.RoomCompiler)
     testImplementation(Dependencies.AndroidxRoom.RoomTesting)

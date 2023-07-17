@@ -18,6 +18,7 @@ abstract class BaseDataModulePlugin : BasePlugin() {
         plugins.apply("org.jetbrains.kotlin.android")
         plugins.apply("org.jetbrains.kotlin.kapt")
         plugins.apply("org.jetbrains.kotlin.plugin.parcelize")
+        plugins.apply("org.jetbrains.kotlin.plugin.serialization")
         plugins.apply("org.jetbrains.dokka")
         plugins.apply("com.google.dagger.hilt.android")
         plugins.apply("com.google.devtools.ksp")
