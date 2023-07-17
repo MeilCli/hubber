@@ -1,0 +1,48 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.20'
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0'
+    id 'net.meilcli.hubber.toolchain.dependencies'
+}
+
+import net.meilcli.hubber.config.Dependencies
+
+group "toolchain-dokka-plugin"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly Dependencies.OrgJetbrainsDokka.DokkaCore
+    
+    implementation platform(Dependencies.OrgJetbrainsKotlin.KotlinBom)
+    implementation Dependencies.OrgJetbrainsKotlin.KotlinStdlibJdk8
+    implementation Dependencies.OrgJetbrainsDokka.DokkaBase
+
+    testImplementation Dependencies.Junit.Junit
+    testImplementation Dependencies.OrgJetbrainsDokka.DokkaBase
+    testImplementation Dependencies.OrgJetbrainsDokka.DokkaBaseTestUtils
+    testImplementation Dependencies.OrgJetbrainsDokka.DokkaTestApi
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config = files("../../detekt.yml")
+    basePath = file("../../")
+}
+
+tasks.named("detekt").configure {
+    reports {
+        // for root detekt task, its task extracts merge.xml
+        xml.outputLocation.set(file("build/reports/detekt/merge.xml"))
+    }
+}
+
+tasks.register("testAll") {
+    dependsOn ':test'
+}
+
+tasks.withType(org.gradle.jvm.tasks.Jar) {
+    destinationDirectory = file("$projectDir/jar")
+}

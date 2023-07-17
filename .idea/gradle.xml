@@ -31,6 +31,11 @@
                   <project path="$PROJECT_DIR$/toolchain/detekt-rule" />
                 </projects>
               </build>
+              <build path="$PROJECT_DIR$/toolchain/dokka-plugin" name="toolchain-dokka-plugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/toolchain/dokka-plugin" />
+                </projects>
+              </build>
             </builds>
           </compositeBuild>
         </compositeConfiguration>
@@ -68,6 +73,7 @@
             <option value="$PROJECT_DIR$/toolchain/config/jvm" />
             <option value="$PROJECT_DIR$/toolchain/dependencies" />
             <option value="$PROJECT_DIR$/toolchain/detekt-rule" />
+            <option value="$PROJECT_DIR$/toolchain/dokka-plugin" />
             <option value="$PROJECT_DIR$/toolchain/generator" />
             <option value="$PROJECT_DIR$/toolchain/generator/dependencies" />
           </set>

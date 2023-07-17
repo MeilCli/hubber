@@ -24,6 +24,12 @@ dependencies {
     library 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2'
     library 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
     library 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
+    library 'org.jetbrains.dokka:dokka-gradle-plugin:1.8.20'
+    library 'org.jetbrains.dokka:dokka-core:1.8.20'
+    library 'org.jetbrains.dokka:dokka-base:1.8.20'
+    library 'org.jetbrains.dokka:dokka-base-test-utils:1.8.20'
+    library 'org.jetbrains.dokka:dokka-test-api:1.8.20'
+    library 'toolchain-dokka-plugin:toolchain-dokka-plugin'
 
     library 'com.google.devtools.ksp:symbol-processing-gradle-plugin:1.8.20-1.0.11'
 

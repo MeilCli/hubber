@@ -14,6 +14,7 @@ repositories {
 dependencies {
     implementation platform(Dependencies.OrgJetbrainsKotlin.KotlinBom)
     implementation Dependencies.OrgJetbrainsKotlin.KotlinStdlibJdk8
+    implementation Dependencies.OrgJetbrainsDokka.DokkaGradlePlugin
     implementation Dependencies.IoGitlabArturboschDetekt.DetektGradlePlugin
 
     detektPlugins Dependencies.IoGitlabArturboschDetekt.DetektFormatting
@@ -28,6 +29,10 @@ gradlePlugin {
         detekt {
             id = 'net.meilcli.hubber.toolchain.config.detekt'
             implementationClass = 'net.meilcli.hubber.toolchain.config.core.DetektPlugin'
+        }
+        dokka {
+            id = 'net.meilcli.hubber.toolchain.config.dokka'
+            implementationClass = 'net.meilcli.hubber.toolchain.config.core.DokkaPlugin'
         }
     }
 }
