@@ -1,23 +1,37 @@
 package net.meilcli.hubber.core.data.source.store
 
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal class Data<T>(
-    private val jetpackDataStore: JetpackDataStore<T>,
-    private val defaultValue: T
+    private val jetpackDataStoreCreator: () -> JetpackDataStore<T>
 ) : IData<T> {
 
+    private val mutex = Mutex()
+    private var jetpackDataStore = jetpackDataStoreCreator()
+
     override suspend fun updateData(transform: suspend (T) -> T) {
-        jetpackDataStore.updateData(transform)
+        mutex.withLock {
+            jetpackDataStore.updateData(transform)
+        }
     }
 
     override suspend fun getData(): T {
-        return jetpackDataStore.data.first()
+        return mutex.withLock {
+            jetpackDataStore.data.first()
+        }
     }
 
-    suspend fun clearData() {
-        updateData {
-            defaultValue
-        }
+    suspend fun acquireJetpackDataStoreLock() {
+        mutex.lock()
+    }
+
+    fun releaseJetpackDataStoreLock() {
+        mutex.unlock()
+    }
+
+    fun recreateJetpackDataStore() {
+        jetpackDataStore = jetpackDataStoreCreator()
     }
 }
