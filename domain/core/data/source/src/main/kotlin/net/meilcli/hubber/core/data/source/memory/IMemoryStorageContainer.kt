@@ -4,9 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import net.meilcli.hubber.core.data.source.ILifespanCleaner
+import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 import net.meilcli.hubber.core.data.source.Lifespan
-import net.meilcli.hubber.core.data.source.MemoryStorageCleaner
+import net.meilcli.hubber.core.data.source.cleaner.MemoryStorageCleaner
 import javax.inject.Singleton
 
 interface IMemoryStorageContainer {

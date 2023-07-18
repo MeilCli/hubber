@@ -1,4 +1,4 @@
-package net.meilcli.hubber.core.data.source
+package net.meilcli.hubber.core.data.source.cleaner
 
 import javax.inject.Qualifier
 

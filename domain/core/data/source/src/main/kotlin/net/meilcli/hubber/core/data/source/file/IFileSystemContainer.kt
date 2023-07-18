@@ -6,8 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import net.meilcli.hubber.core.data.source.FileSystemCleaner
-import net.meilcli.hubber.core.data.source.ILifespanCleaner
+import net.meilcli.hubber.core.data.source.cleaner.FileSystemCleaner
+import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 import net.meilcli.hubber.core.data.source.Lifespan
 import javax.inject.Singleton
 

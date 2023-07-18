@@ -1,7 +1,7 @@
 package net.meilcli.hubber.core.data.source.store
 
 import android.content.Context
-import net.meilcli.hubber.core.data.source.ILifespanCleaner
+import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 import net.meilcli.hubber.core.data.source.Lifespan
 
 internal class DataStoreContainer(

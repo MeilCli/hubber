@@ -1,6 +1,6 @@
 package net.meilcli.hubber.core.data.source.memory
 
-import net.meilcli.hubber.core.data.source.ILifespanCleaner
+import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 import net.meilcli.hubber.core.data.source.Lifespan
 import java.util.concurrent.ConcurrentHashMap
 
