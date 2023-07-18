@@ -8,23 +8,23 @@ internal class DataStoreContainer(
     context: Context
 ) : IDataStoreContainer, ILifespanCleaner {
 
-    private val foreverMemory = DataStore(context = context, fileNamePrefix = "forever")
-    private val untilLogoutMemory = DataStore(context = context, fileNamePrefix = "until_logout")
-    private val untilTaskKillMemory = DataStore(context = context, fileNamePrefix = "until_task_kill")
+    private val foreverDataStore = DataStore(context = context, fileNamePrefix = "forever")
+    private val untilLogoutDataStore = DataStore(context = context, fileNamePrefix = "until_logout")
+    private val untilTaskKillDataStore = DataStore(context = context, fileNamePrefix = "until_task_kill")
 
     override fun lifeSpan(lifespan: Lifespan): IDataStore {
         return when (lifespan) {
-            Lifespan.Forever -> foreverMemory
-            Lifespan.UntilLogout -> untilLogoutMemory
-            Lifespan.UntilTaskKill -> untilTaskKillMemory
+            Lifespan.Forever -> foreverDataStore
+            Lifespan.UntilLogout -> untilLogoutDataStore
+            Lifespan.UntilTaskKill -> untilTaskKillDataStore
         }
     }
 
     override suspend fun clearByLogout() {
-        untilLogoutMemory.clear()
+        untilLogoutDataStore.clear()
     }
 
     override suspend fun clearByTaskKill() {
-        untilTaskKillMemory.clear()
+        untilTaskKillDataStore.clear()
     }
 }
