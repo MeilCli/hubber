@@ -5,7 +5,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import net.meilcli.hubber.authentication.data.main.entity.Authentication
+import net.meilcli.hubber.authentication.data.main.internal.combine.AuthenticationCombinator
 import net.meilcli.hubber.authentication.data.main.internal.memory.AuthenticationMemoryStorage
+import net.meilcli.hubber.core.data.source.cleaner.CompositeLifespanCleaner
+import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 import net.meilcli.hubber.core.data.source.memory.IMemoryStorageContainer
 import javax.inject.Singleton
 
@@ -23,8 +26,13 @@ object AuthenticationRepositoryModule {
     @Provides
     @Singleton
     fun provideAuthenticationRepository(
-        memoryStorageContainer: IMemoryStorageContainer
+        memoryStorageContainer: IMemoryStorageContainer,
+        @CompositeLifespanCleaner
+        compositeLifespanCleaner: ILifespanCleaner
     ): IAuthenticationRepository {
-        return AuthenticationMemoryStorage(memoryStorageContainer)
+        return AuthenticationCombinator(
+            authenticationMemoryStorage = AuthenticationMemoryStorage(memoryStorageContainer),
+            compositeLifespanCleaner = compositeLifespanCleaner
+        )
     }
 }

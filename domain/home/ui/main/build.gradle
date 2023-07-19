@@ -1,0 +1,8 @@
+plugins {
+    id 'net.meilcli.hubber.toolchain.dependencies'
+    id 'net.meilcli.hubber.toolchain.config.module.some.ui'
+}
+
+dependencies {
+    implementation project(':domain:authentication:data:main')
+}

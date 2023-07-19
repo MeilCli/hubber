@@ -1,14 +1,10 @@
-package net.meilcli.hubber.authentication.ui.main.login.method.select
+package net.meilcli.hubber.home.ui.main.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,20 +16,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import net.meilcli.hubber.authentication.contract.main.destinations.LoginMethodSelectPageDestination
+import net.meilcli.hubber.home.contract.main.destinations.HomePageDestination
 import net.meilcli.hubber.splash.contract.main.destinations.SplashPageDestination
 
 @Composable
-fun LoginMethodSelectPageHost(
-    pageViewModel: LoginMethodSelectPageViewModel = hiltViewModel(),
+fun HomePageHost(
+    pageViewModel: HomePageViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
     LaunchedEffect(pageViewModel) {
         pageViewModel.event.collect {
             when (it) {
-                LoginMethodSelectPageViewModel.Event.AuthenticateCompleteAsGuest -> {
+                HomePageViewModel.Event.LogoutComplete -> {
                     navigator.navigate(SplashPageDestination) {
-                        popUpTo(LoginMethodSelectPageDestination) {
+                        popUpTo(HomePageDestination) {
                             inclusive = true
                         }
                     }
@@ -42,40 +38,27 @@ fun LoginMethodSelectPageHost(
         }
     }
 
-    val pageState = rememberLoginMethodSelectPageState(
-        pageViewModel = pageViewModel,
-        navigator = navigator
-    )
+    val pageState = rememberHomePageState(pageViewModel = pageViewModel)
 
-    LoginMethodSelectPage(pageState)
+    HomePage(pageState = pageState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoginMethodSelectPage(pageState: LoginMethodSelectPageState) {
+private fun HomePage(pageState: HomePageState) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Choose Login")
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = pageState.backNavigation
-                    ) {
-                        Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
-                    }
+                    Text(text = "Home")
                 },
                 modifier = Modifier
             )
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            Button(onClick = pageState.authenticateAsGuest) {
-                Text(text = "Login as Guest")
-            }
-            Button(onClick = pageState.authenticateAsUser) {
-                Text(text = "Login as User")
+            Button(onClick = pageState.logout) {
+                Text(text = "Logout")
             }
         }
     }
@@ -85,12 +68,6 @@ private fun LoginMethodSelectPage(pageState: LoginMethodSelectPageState) {
 @Composable
 private fun Preview() {
     MaterialTheme {
-        LoginMethodSelectPage(
-            pageState = LoginMethodSelectPageState(
-                authenticateAsGuest = {},
-                authenticateAsUser = {},
-                backNavigation = {}
-            )
-        )
+        HomePage(pageState = HomePageState(logout = {}))
     }
 }

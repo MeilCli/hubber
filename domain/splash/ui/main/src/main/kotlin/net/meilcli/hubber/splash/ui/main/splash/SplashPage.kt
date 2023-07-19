@@ -15,6 +15,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
 import net.meilcli.hubber.authentication.contract.main.destinations.LoginMethodSelectPageDestination
 import net.meilcli.hubber.authentication.data.main.entity.Authentication
+import net.meilcli.hubber.home.contract.main.destinations.HomePageDestination
 import net.meilcli.hubber.splash.contract.main.destinations.SplashPageDestination
 
 @Composable
@@ -26,6 +27,12 @@ fun SplashPageHost(
     LaunchedEffect(authentication) {
         when (authentication) {
             is Authentication.Never -> navigator.navigate(LoginMethodSelectPageDestination) {
+                popUpTo(SplashPageDestination) {
+                    inclusive = true
+                }
+            }
+            is Authentication.Guest,
+            is Authentication.LoginUser -> navigator.navigate(HomePageDestination) {
                 popUpTo(SplashPageDestination) {
                     inclusive = true
                 }
