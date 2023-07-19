@@ -68,8 +68,19 @@ gradlePlugin {
     }
 }
 
+def findDetektYmlDirectory() {
+    def current = buildDir
+    while (current.parentFile != null) {
+        if (new File(current, "detekt.yml").exists()) {
+            return current
+        }
+        current = current.parentFile
+    }
+    return current
+}
+
 detekt {
     buildUponDefaultConfig = true
-    config = files("../../../detekt.yml")
-    basePath = file("../../../")
+    config = files("${findDetektYmlDirectory()}/detekt.yml")
+    basePath = findDetektYmlDirectory()
 }

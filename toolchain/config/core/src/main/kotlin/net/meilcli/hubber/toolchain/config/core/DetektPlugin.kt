@@ -15,10 +15,10 @@ class DetektPlugin : Plugin<Project> {
         project.extensions
             .findByType(DetektExtension::class.java)
             ?.apply {
-                val rootDir = project.findRootDirectory()
+                val directory = project.findDetektYmlDirectory()
                 buildUponDefaultConfig = true
-                config = project.files(File(rootDir, "detekt.yml"))
-                basePath = rootDir.absolutePath
+                config = project.files(File(directory, "detekt.yml"))
+                basePath = directory.absolutePath
             }
         val dependencies = mutableListOf<Dependency?>()
         dependencies += project.dependencies.add("detektPlugins", Dependencies.IoGitlabArturboschDetekt.DetektFormatting)
@@ -36,16 +36,13 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    // need rootDir but Project.rootDir is root of composite module
-    private fun Project.findRootDirectory(): File {
-        var current = rootDir
+    private fun Project.findDetektYmlDirectory(): File {
+        var current = buildDir
         while (current.parentFile != null) {
-            if (current.name == "toolchain") {
-                current = current.parentFile
-                break
-            } else {
-                current = current.parentFile
+            if (File(current, "detekt.yml").exists()) {
+                return current
             }
+            current = current.parentFile
         }
         return current
     }

@@ -24,6 +24,14 @@ tasks.register("detekt", ReportMergeTask) { mergeTask ->
         mergeTask.dependsOn includeBuild.task(":detekt")
         mergeTask.input.from(new File(includeBuild.projectDir, "build/reports/detekt/merge.xml"))
     }
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "detekt") {
+                mergeTask.dependsOn task
+                mergeTask.input.from(new File(subProject.projectDir, "build/reports/detekt/detekt.xml"))
+            }
+        }
+    }
 }
 
 tasks.register("check") {

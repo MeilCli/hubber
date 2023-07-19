@@ -5,7 +5,7 @@ import net.meilcli.hubber.authentication.data.main.entity.Authentication
 import net.meilcli.hubber.authentication.data.main.internal.memory.AuthenticationMemoryStorage
 import net.meilcli.hubber.core.data.source.cleaner.ILifespanCleaner
 
-class AuthenticationCombinator(
+internal class AuthenticationCombinator(
     private val authenticationMemoryStorage: AuthenticationMemoryStorage,
     private val compositeLifespanCleaner: ILifespanCleaner
 ) : IAuthenticationRepository {
