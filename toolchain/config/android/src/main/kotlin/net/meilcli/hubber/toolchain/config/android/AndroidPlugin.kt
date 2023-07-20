@@ -56,6 +56,12 @@ class AndroidPlugin : BasePlugin() {
             it.setSourceCompatibility(JavaVersion.VERSION_1_8)
             it.setTargetCompatibility(JavaVersion.VERSION_1_8)
         }
+        extension.testOptions {
+            it.unitTests {
+                // for robolectric
+                isIncludeAndroidResources = true
+            }
+        }
 
         setupCompose(extension)
     }

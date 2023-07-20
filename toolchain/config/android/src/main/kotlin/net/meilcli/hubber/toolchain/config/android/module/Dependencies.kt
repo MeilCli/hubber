@@ -67,6 +67,7 @@ fun DependencyHandler.setupAndroidUi() {
 fun DependencyHandler.setupTest() {
     testImplementation(Dependencies.Junit.Junit)
     testImplementation(Dependencies.ComGoogleTruth.Truth)
+    testImplementation(Dependencies.OrgRobolectric.Robolectric)
 
     androidTestImplementation(Dependencies.AndroidxTestExt.Junit)
     androidTestImplementation(Dependencies.AndroidxTestEspresso.EspressoCore)
