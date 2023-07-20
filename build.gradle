@@ -18,7 +18,7 @@ repositories {
 }
 
 tasks.register("detekt", ReportMergeTask) { mergeTask ->
-    group = "hubber"
+    mergeTask.group = "hubber"
     mergeTask.output = project.layout.buildDirectory.file("reports/detekt/merge.xml")
     gradle.includedBuilds.forEach { includeBuild ->
         mergeTask.dependsOn includeBuild.task(":detekt")
@@ -34,22 +34,62 @@ tasks.register("detekt", ReportMergeTask) { mergeTask ->
     }
 }
 
-tasks.register("check") {
-    group = "hubber"
-    dependsOn gradle.includedBuilds*.task(":check")
+tasks.register("check") { mergeTask ->
+    mergeTask.group = "hubber"
+    mergeTask.dependsOn gradle.includedBuilds*.task(":check")
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "check") {
+                mergeTask.dependsOn task
+            }
+        }
+    }
 }
 
-tasks.register("clean") {
-    group = "hubber"
-    dependsOn gradle.includedBuilds*.task(":clean")
+tasks.register("clean") { mergeTask ->
+    mergeTask.group = "hubber"
+    mergeTask.dependsOn gradle.includedBuilds*.task(":clean")
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "clean") {
+                mergeTask.dependsOn task
+            }
+        }
+    }
 }
 
-tasks.register("assemble") {
-    group = "hubber"
-    dependsOn gradle.includedBuilds*.task(":assemble")
+tasks.register("assemble") { mergeTask ->
+    mergeTask.group = "hubber"
+    mergeTask.dependsOn gradle.includedBuilds*.task(":assemble")
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "assemble") {
+                mergeTask.dependsOn task
+            }
+        }
+    }
 }
 
-tasks.register("testAll") {
-    group = "hubber"
-    dependsOn gradle.includedBuilds*.task(":testAll")
+tasks.register("testAll") { mergeTask ->
+    mergeTask.group = "hubber"
+    mergeTask.dependsOn gradle.includedBuilds*.task(":testAll")
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "test") {
+                mergeTask.dependsOn task
+            }
+        }
+    }
+}
+
+tasks.register("testDebugOnly") { mergeTask ->
+    mergeTask.group = "hubber"
+    mergeTask.dependsOn gradle.includedBuilds*.task(":testAll")
+    subprojects.forEach { subProject ->
+        subProject.tasks.all { task ->
+            if (task.name == "testDebugUnitTest") {
+                mergeTask.dependsOn task
+            }
+        }
+    }
 }
