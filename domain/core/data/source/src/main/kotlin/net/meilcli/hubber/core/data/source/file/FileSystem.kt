@@ -1,14 +1,14 @@
 package net.meilcli.hubber.core.data.source.file
 
-import android.content.Context
+import net.meilcli.hubber.core.data.source.ILocalFileDirectoryProvider
 import java.io.File
 
 internal class FileSystem(
-    context: Context,
+    localFileDirectoryProvider: ILocalFileDirectoryProvider,
     parentDirectoryName: String
 ) : IFileSystem {
 
-    private val parentDirectory = File(context.filesDir, "fileSystem/$parentDirectoryName")
+    private val parentDirectory = File(localFileDirectoryProvider.provideFileDirectory(), "fileSystem/$parentDirectoryName")
 
     override fun file(fileName: String): File {
         return File(parentDirectory, fileName)

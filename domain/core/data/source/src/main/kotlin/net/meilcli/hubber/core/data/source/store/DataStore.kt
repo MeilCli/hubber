@@ -1,25 +1,26 @@
 package net.meilcli.hubber.core.data.source.store
 
-import android.content.Context
 import androidx.datastore.core.DataStoreFactory
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.KSerializer
+import net.meilcli.hubber.core.data.source.ICoroutineDispatcherProvider
+import net.meilcli.hubber.core.data.source.ILocalFileDirectoryProvider
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 internal class DataStore(
-    context: Context,
+    localFileDirectoryProvider: ILocalFileDirectoryProvider,
+    coroutineDispatcherProvider: ICoroutineDispatcherProvider,
     parentDirectoryName: String
 ) : IDataStore {
 
-    private val parentDirectory = File(context.filesDir, "dataStore/$parentDirectoryName")
+    private val parentDirectory = File(localFileDirectoryProvider.provideFileDirectory(), "dataStore/$parentDirectoryName")
     private val data = ConcurrentHashMap<String, Data<*>>()
 
     // This scope is DataStoreFactory's default value. Usage is release file lock
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val scope = CoroutineScope(coroutineDispatcherProvider.provideIoDispatcher() + SupervisorJob())
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> data(key: String, defaultValue: T, serializer: KSerializer<T>): IData<T> {
