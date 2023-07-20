@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 internal class DataStore(
     localFileDirectoryProvider: ILocalFileDirectoryProvider,
-    coroutineDispatcherProvider: ICoroutineDispatcherProvider,
+    private val coroutineDispatcherProvider: ICoroutineDispatcherProvider,
     parentDirectoryName: String
 ) : IDataStore {
 
@@ -20,7 +20,11 @@ internal class DataStore(
     private val data = ConcurrentHashMap<String, Data<*>>()
 
     // This scope is DataStoreFactory's default value. Usage is release file lock
-    private val scope = CoroutineScope(coroutineDispatcherProvider.provideIoDispatcher() + SupervisorJob())
+    private var scope = createNewScope()
+
+    private fun createNewScope(): CoroutineScope {
+        return CoroutineScope(coroutineDispatcherProvider.provideIoDispatcher() + SupervisorJob())
+    }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> data(key: String, defaultValue: T, serializer: KSerializer<T>): IData<T> {
@@ -46,6 +50,7 @@ internal class DataStore(
             // release file lock
             scope.cancel()
             parentDirectory.deleteRecursively()
+            scope = createNewScope()
             data.forEach {
                 // cancelled DataStore cannot use since here, so recreate
                 it.value.recreateJetpackDataStore()
