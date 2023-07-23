@@ -1,5 +1,6 @@
 package net.meilcli.hubber.core.data.source.store
 
+import androidx.datastore.core.DataMigration
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -20,7 +21,7 @@ internal class DataStore(
 
     private val parentDirectory = File(localFileDirectoryProvider.provideFileDirectory(), "dataStore/$parentDirectoryName")
     private val entityData = ConcurrentHashMap<String, EntityData<*>>()
-    private val preferenceDataSource = ConcurrentHashMap<String, PreferenceDataSource>()
+    private val preferenceData = ConcurrentHashMap<String, PreferenceData>()
 
     // This scope is DataStoreFactory's default value. Usage is release file lock
     private var scope = createNewScope()
@@ -30,7 +31,12 @@ internal class DataStore(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> entityData(key: String, defaultValue: T, serializer: KSerializer<T>): IData<T> {
+    override fun <T> entityData(
+        key: String,
+        defaultValue: T,
+        serializer: KSerializer<T>,
+        dataMigrations: List<DataMigration<T>>
+    ): IData<T> {
         return entityData.getOrPut(key) {
             EntityData(
                 jetpackDataStoreCreator = {
@@ -38,33 +44,34 @@ internal class DataStore(
                     DataStoreFactory.create(
                         serializer = JsonSerializer(defaultValue, serializer),
                         produceFile = { File(parentDirectory, "$key.json") },
-                        scope = scope
+                        scope = scope,
+                        migrations = dataMigrations
                     )
                 }
             )
         } as IData<T>
     }
 
-    override fun <T> preferenceData(name: String, key: Preferences.Key<T>, defaultValue: T): IData<T> {
-        val preferenceDataSource = preferenceDataSource.getOrPut(name) {
-            PreferenceDataSource(
+    override fun preferenceData(name: String, dataMigrations: List<DataMigration<Preferences>>): IPreferenceData {
+        return preferenceData.getOrPut(name) {
+            PreferenceData(
                 jetpackDataStoreCreator = {
                     // acquire file lock
                     PreferenceDataStoreFactory.create(
                         produceFile = { File(parentDirectory, "$name.preferences_pb") },
-                        scope = scope
+                        scope = scope,
+                        migrations = dataMigrations
                     )
                 }
             )
         }
-        return PreferenceData(preferenceDataSource, key, defaultValue)
     }
 
     suspend fun clear() {
         entityData.forEach {
             it.value.acquireJetpackDataStoreLock()
         }
-        preferenceDataSource.forEach {
+        preferenceData.forEach {
             it.value.acquireJetpackDataStoreLock()
         }
         try {
@@ -77,14 +84,14 @@ internal class DataStore(
             entityData.forEach {
                 it.value.recreateJetpackDataStore()
             }
-            preferenceDataSource.forEach {
+            preferenceData.forEach {
                 it.value.recreateJetpackDataStore()
             }
         } finally {
             entityData.forEach {
                 it.value.releaseJetpackDataStoreLock()
             }
-            preferenceDataSource.forEach {
+            preferenceData.forEach {
                 it.value.releaseJetpackDataStoreLock()
             }
         }

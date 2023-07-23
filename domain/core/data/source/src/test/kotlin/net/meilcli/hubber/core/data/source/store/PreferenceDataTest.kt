@@ -23,45 +23,42 @@ class PreferenceDataTest {
     val temporaryFolder = TemporaryFolder()
 
     @Test
-    fun testInitialData() = runTest(coroutineDispatcher) {
-        val defaultValue = 1
+    fun testPick_returnSameInstance() = runTest(coroutineDispatcher) {
         val data = PreferenceData(
-            PreferenceDataSource(
-                jetpackDataStoreCreator = {
-                    PreferenceDataStoreFactory.create(
-                        produceFile = { File(temporaryFolder.root, "data.preferences_pb") },
-                        scope = CoroutineScope(coroutineDispatcher + SupervisorJob())
-                    )
-                }
-            ),
-            preferenceKey,
-            defaultValue
+            jetpackDataStoreCreator = {
+                PreferenceDataStoreFactory.create(
+                    produceFile = { File(temporaryFolder.root, "data.preferences_pb") },
+                    scope = CoroutineScope(coroutineDispatcher + SupervisorJob())
+                )
+            }
         )
 
-        val actual = data.getData()
+        val pick1 = data.pick(preferenceKey, 1)
+        val pick2 = data.pick(preferenceKey, 1)
 
-        Truth.assertThat(actual).isEqualTo(defaultValue)
+        Truth.assertThat(pick1).isEqualTo(pick2)
     }
 
     @Test
     fun testUpdateData() = runTest(UnconfinedTestDispatcher()) {
-        val defaultValue = 1
         val data = PreferenceData(
-            PreferenceDataSource(
-                jetpackDataStoreCreator = {
-                    PreferenceDataStoreFactory.create(
-                        produceFile = { File(temporaryFolder.root, "data.preferences_pb") },
-                        scope = CoroutineScope(coroutineDispatcher + SupervisorJob())
-                    )
-                }
-            ),
-            preferenceKey,
-            defaultValue
+            jetpackDataStoreCreator = {
+                PreferenceDataStoreFactory.create(
+                    produceFile = { File(temporaryFolder.root, "data.preferences_pb") },
+                    scope = CoroutineScope(coroutineDispatcher + SupervisorJob())
+                )
+            }
         )
 
-        data.updateData { 100 }
+        data.updateData {
+            it.toMutablePreferences()
+                .apply {
+                    this[preferenceKey] = 100
+                }
+                .toPreferences()
+        }
         val actual = data.getData()
 
-        Truth.assertThat(actual).isEqualTo(100)
+        Truth.assertThat(actual[preferenceKey]).isEqualTo(100)
     }
 }
