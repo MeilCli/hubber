@@ -15,7 +15,7 @@ import org.junit.rules.TemporaryFolder
 import java.io.File
 
 @ExperimentalCoroutinesApi
-class DataTest {
+class EntityDataTest {
 
     @Serializable
     private data class TestEntity(
@@ -31,7 +31,7 @@ class DataTest {
     @Test
     fun testInitialData() = runTest(coroutineDispatcher) {
         val defaultValue = TestEntity("value")
-        val data = Data(
+        val data = EntityData(
             jetpackDataStoreCreator = {
                 DataStoreFactory.create(
                     serializer = JsonSerializer(defaultValue, TestEntity.serializer()),
@@ -49,7 +49,7 @@ class DataTest {
     @Test
     fun testUpdateData() = runTest(UnconfinedTestDispatcher()) {
         val defaultValue = TestEntity("value")
-        val data = Data(
+        val data = EntityData(
             jetpackDataStoreCreator = {
                 DataStoreFactory.create(
                     serializer = JsonSerializer(defaultValue, TestEntity.serializer()),

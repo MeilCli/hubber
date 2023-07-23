@@ -153,7 +153,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.Forever)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByLogout()
@@ -168,7 +168,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.UntilLogout)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByLogout()
@@ -183,7 +183,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.UntilTaskKill)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByLogout()
@@ -227,7 +227,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.Forever)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByTaskKill()
@@ -242,7 +242,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.UntilLogout)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByTaskKill()
@@ -257,7 +257,7 @@ class DataStoreContainerTest {
                 coroutineDispatcherProvider = TestCoroutineDispatcherProvider()
             )
             val dataStore = dataStoreContainer.lifeSpan(Lifespan.UntilTaskKill)
-            val data = dataStore.data("a", TestEntity("value"))
+            val data = dataStore.entityData("a", TestEntity("value"))
             data.updateData { TestEntity("updated") }
 
             dataStoreContainer.clearByTaskKill()

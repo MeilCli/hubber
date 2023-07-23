@@ -2,6 +2,7 @@
 
 package net.meilcli.hubber.core.data.source.store
 
+import androidx.datastore.preferences.core.intPreferencesKey
 import com.google.common.truth.Truth
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,17 +48,37 @@ class DataStoreTest {
     val temporaryFolder = TemporaryFolder()
 
     @Test
-    fun testData_returnSameInstance() = runTest(coroutineDispatcher) {
+    fun testEntityData_returnSameInstance() = runTest(coroutineDispatcher) {
         val dataStore = DataStore(
             localFileDirectoryProvider = TestLocalFileDirectoryProvider(),
             coroutineDispatcherProvider = TestCoroutineDispatcherProvider(),
             parentDirectoryName = "test_life_span"
         )
 
-        val data1 = dataStore.data("test_data", TestEntity())
-        val data2 = dataStore.data("test_data", TestEntity())
+        val data1 = dataStore.entityData("test_data", TestEntity())
+        val data2 = dataStore.entityData("test_data", TestEntity())
 
         Truth.assertThat(data1).isEqualTo(data2)
+    }
+
+    @Test
+    fun testPreferenceData_synchronizeData() = runTest(coroutineDispatcher) {
+        val dataStore = DataStore(
+            localFileDirectoryProvider = TestLocalFileDirectoryProvider(),
+            coroutineDispatcherProvider = TestCoroutineDispatcherProvider(),
+            parentDirectoryName = "test_life_span"
+        )
+
+        val preferenceKey = intPreferencesKey("test")
+        val data1 = dataStore.preferenceData("test_data", preferenceKey, 1)
+        val data2 = dataStore.preferenceData("test_data", preferenceKey, 1)
+
+        Truth.assertThat(data1.getData()).isEqualTo(data2.getData())
+
+        data1.updateData { 100 }
+
+        Truth.assertThat(data1.getData()).isEqualTo(100)
+        Truth.assertThat(data2.getData()).isEqualTo(100)
     }
 
     @Test
@@ -67,14 +88,19 @@ class DataStoreTest {
             coroutineDispatcherProvider = TestCoroutineDispatcherProvider(),
             parentDirectoryName = "test_life_span"
         )
-        val data = dataStore.data("test_data", TestEntity())
+        val preferenceKey = intPreferencesKey("test")
+        val entityData = dataStore.entityData("test_entity_data", TestEntity())
+        val preferenceData = dataStore.preferenceData("test_preference_data", preferenceKey, 1)
 
-        data.updateData { TestEntity("updated") }
+        entityData.updateData { TestEntity("updated") }
+        preferenceData.updateData { 100 }
 
-        Truth.assertThat(data.getData()).isEqualTo(TestEntity("updated"))
+        Truth.assertThat(entityData.getData()).isEqualTo(TestEntity("updated"))
+        Truth.assertThat(preferenceData.getData()).isEqualTo(100)
 
         dataStore.clear()
 
-        Truth.assertThat(data.getData()).isEqualTo(TestEntity())
+        Truth.assertThat(entityData.getData()).isEqualTo(TestEntity())
+        Truth.assertThat(preferenceData.getData()).isEqualTo(1)
     }
 }

@@ -1,6 +1,8 @@
 package net.meilcli.hubber.core.data.source.store
 
 import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -17,7 +19,8 @@ internal class DataStore(
 ) : IDataStore {
 
     private val parentDirectory = File(localFileDirectoryProvider.provideFileDirectory(), "dataStore/$parentDirectoryName")
-    private val data = ConcurrentHashMap<String, Data<*>>()
+    private val entityData = ConcurrentHashMap<String, EntityData<*>>()
+    private val preferenceDataSource = ConcurrentHashMap<String, PreferenceDataSource>()
 
     // This scope is DataStoreFactory's default value. Usage is release file lock
     private var scope = createNewScope()
@@ -27,9 +30,9 @@ internal class DataStore(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T> data(key: String, defaultValue: T, serializer: KSerializer<T>): IData<T> {
-        return data.getOrPut(key) {
-            Data(
+    override fun <T> entityData(key: String, defaultValue: T, serializer: KSerializer<T>): IData<T> {
+        return entityData.getOrPut(key) {
+            EntityData(
                 jetpackDataStoreCreator = {
                     // acquire file lock
                     DataStoreFactory.create(
@@ -42,8 +45,26 @@ internal class DataStore(
         } as IData<T>
     }
 
+    override fun <T> preferenceData(name: String, key: Preferences.Key<T>, defaultValue: T): IData<T> {
+        val preferenceDataSource = preferenceDataSource.getOrPut(name) {
+            PreferenceDataSource(
+                jetpackDataStoreCreator = {
+                    // acquire file lock
+                    PreferenceDataStoreFactory.create(
+                        produceFile = { File(parentDirectory, "$name.preferences_pb") },
+                        scope = scope
+                    )
+                }
+            )
+        }
+        return PreferenceData(preferenceDataSource, key, defaultValue)
+    }
+
     suspend fun clear() {
-        data.forEach {
+        entityData.forEach {
+            it.value.acquireJetpackDataStoreLock()
+        }
+        preferenceDataSource.forEach {
             it.value.acquireJetpackDataStoreLock()
         }
         try {
@@ -51,12 +72,19 @@ internal class DataStore(
             scope.cancel()
             parentDirectory.deleteRecursively()
             scope = createNewScope()
-            data.forEach {
-                // cancelled DataStore cannot use since here, so recreate
+
+            // cancelled DataStore cannot use since here, so recreate
+            entityData.forEach {
+                it.value.recreateJetpackDataStore()
+            }
+            preferenceDataSource.forEach {
                 it.value.recreateJetpackDataStore()
             }
         } finally {
-            data.forEach {
+            entityData.forEach {
+                it.value.releaseJetpackDataStoreLock()
+            }
+            preferenceDataSource.forEach {
                 it.value.releaseJetpackDataStoreLock()
             }
         }

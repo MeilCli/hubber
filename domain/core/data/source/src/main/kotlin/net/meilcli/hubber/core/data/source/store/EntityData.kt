@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class Data<T>(
+internal class EntityData<T>(
     private val jetpackDataStoreCreator: () -> JetpackDataStore<T>
 ) : IData<T> {
 
