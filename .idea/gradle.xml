@@ -59,9 +59,11 @@
             <option value="$PROJECT_DIR$/domain/core/contract/main" />
             <option value="$PROJECT_DIR$/domain/core/data" />
             <option value="$PROJECT_DIR$/domain/core/data/main" />
+            <option value="$PROJECT_DIR$/domain/core/data/paiging" />
             <option value="$PROJECT_DIR$/domain/core/data/source" />
             <option value="$PROJECT_DIR$/domain/core/ui" />
             <option value="$PROJECT_DIR$/domain/core/ui/main" />
+            <option value="$PROJECT_DIR$/domain/core/ui/paiging" />
             <option value="$PROJECT_DIR$/domain/home" />
             <option value="$PROJECT_DIR$/domain/home/contract" />
             <option value="$PROJECT_DIR$/domain/home/contract/main" />
