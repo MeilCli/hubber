@@ -14,26 +14,24 @@ import net.meilcli.hubber.core.data.paiging.IPagingSource
 
 class MultipleSegmentationPager<
     TPagingElement : IPagingElement,
-    TPagingRequest : IPagingRequest,
     TPagingResult : IPagingResult<TPagingElement>,
     TPagingListSegment : IPagingListSegment<TPagingElement>
     >(
-    private val pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
     private val pagingListSegmentConnector: IPagingListSegmentConnector<TPagingElement, TPagingResult, TPagingListSegment>
 ) :
     IPager<
         TPagingElement,
-        TPagingRequest,
         TPagingResult,
         TPagingListSegment,
         MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>
         > {
 
-    private suspend fun firstLoad(
+    private suspend fun <TPagingRequest : IPagingRequest> firstLoad(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
         forceRefresh: Boolean
     ): Flow<MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
-        val pagingRequest = pagingRequestProvider.initialPagingRequest
+        val pagingRequest = pagingRequestProvider.initialPagingRequest()
         return pagingSource.load(pagingRequest, forceRefresh)
             .map { result ->
                 with(pagingListSegmentConnector) {
@@ -42,24 +40,27 @@ class MultipleSegmentationPager<
             }
     }
 
-    override suspend fun loadInitial(
+    override suspend fun <TPagingRequest : IPagingRequest> loadInitial(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
     ): Flow<MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
-        return firstLoad(pagingSource, forceRefresh = false)
+        return firstLoad(pagingRequestProvider, pagingSource, forceRefresh = false)
     }
 
-    override suspend fun loadRefresh(
+    override suspend fun <TPagingRequest : IPagingRequest> loadRefresh(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
     ): Flow<MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
-        return firstLoad(pagingSource, forceRefresh = true)
+        return firstLoad(pagingRequestProvider, pagingSource, forceRefresh = true)
     }
 
-    override suspend fun loadPrevious(
+    override suspend fun <TPagingRequest : IPagingRequest> loadPrevious(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
         pagingList: MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>
     ): Flow<MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
         if (pagingList.needInitialLoad(pagingRequestProvider)) {
-            return loadInitial(pagingSource)
+            return loadInitial(pagingRequestProvider, pagingSource)
         }
 
         val segment = pagingList.segments.first()
@@ -79,12 +80,13 @@ class MultipleSegmentationPager<
             }
     }
 
-    override suspend fun loadNext(
+    override suspend fun <TPagingRequest : IPagingRequest> loadNext(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
         pagingList: MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>
     ): Flow<MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
         if (pagingList.needInitialLoad(pagingRequestProvider)) {
-            return loadInitial(pagingSource)
+            return loadInitial(pagingRequestProvider, pagingSource)
         }
 
         val segment = pagingList.segments.last()
@@ -104,7 +106,8 @@ class MultipleSegmentationPager<
             }
     }
 
-    suspend fun loadPreviousBetweenSegments(
+    suspend fun <TPagingRequest : IPagingRequest> loadPreviousBetweenSegments(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
         pagingList: MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>,
         startEdgeSegment: TPagingListSegment,
@@ -140,7 +143,8 @@ class MultipleSegmentationPager<
             }
     }
 
-    suspend fun loadNextBetweenSegments(
+    suspend fun <TPagingRequest : IPagingRequest> loadNextBetweenSegments(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
         pagingList: MultipleSegmentationPagingList<TPagingElement, TPagingListSegment>,
         startEdgeSegment: TPagingListSegment,

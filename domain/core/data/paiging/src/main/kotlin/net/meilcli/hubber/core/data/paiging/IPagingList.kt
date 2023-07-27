@@ -1,9 +1,9 @@
 package net.meilcli.hubber.core.data.paiging
 
-interface IPagingList<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> : List<TPagingElement> {
+interface IPagingList<out TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> : List<TPagingElement> {
 
     interface IPagingListFactory<
-        TPagingElement : IPagingElement,
+        out TPagingElement : IPagingElement,
         TPagingListSegment : IPagingListSegment<TPagingElement>,
         TPagingList : IPagingList<TPagingElement, TPagingListSegment>
         > {

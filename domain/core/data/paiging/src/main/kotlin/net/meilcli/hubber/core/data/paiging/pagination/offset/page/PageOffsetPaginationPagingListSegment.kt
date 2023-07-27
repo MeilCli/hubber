@@ -3,7 +3,7 @@ package net.meilcli.hubber.core.data.paiging.pagination.offset.page
 import net.meilcli.hubber.core.data.paiging.IPagingElement
 import net.meilcli.hubber.core.data.paiging.IPagingListSegment
 
-class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> internal constructor(
+class PageOffsetPaginationPagingListSegment<out TPagingElement : IPagingElement> internal constructor(
     val elements: List<TPagingElement>,
     val pages: List<Int>,
     override val reachingStartEdge: Boolean,

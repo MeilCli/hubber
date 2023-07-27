@@ -1,14 +1,14 @@
 package net.meilcli.hubber.core.data.paiging
 
 interface IPagingRequestProvider<
-    TPagingElement : IPagingElement,
-    TPagingRequest : IPagingRequest,
-    TPagingListSegment : IPagingListSegment<TPagingElement>
+    out TPagingElement : IPagingElement,
+    out TPagingRequest : IPagingRequest,
+    in TPagingListSegment : IPagingListSegment<TPagingElement>
     > {
 
-    val initialPagingRequest: TPagingRequest
-
     fun TPagingListSegment.needInitialLoad(): Boolean
+
+    fun initialPagingRequest(): TPagingRequest
 
     fun TPagingListSegment.canPrevious(): Boolean
 

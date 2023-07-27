@@ -1,8 +1,8 @@
 package net.meilcli.hubber.core.data.paiging
 
 interface IPagingListSegmentConnector<
-    TPagingElement : IPagingElement,
-    TPagingResult : IPagingResult<TPagingElement>,
+    out TPagingElement : IPagingElement,
+    in TPagingResult : IPagingResult<TPagingElement>,
     TPagingListSegment : IPagingListSegment<TPagingElement>
     > {
 
