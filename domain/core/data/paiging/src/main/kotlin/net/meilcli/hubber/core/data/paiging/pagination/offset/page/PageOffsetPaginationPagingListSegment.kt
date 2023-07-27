@@ -7,7 +7,7 @@ import net.meilcli.hubber.core.data.paiging.IPagingListSegment
 class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> internal constructor(
     val elements: List<TPagingElement>,
     val pages: List<Int>,
-    override val countPerPage: Int,
+    override val countPerRequest: Int,
     override val reachingStartEdge: Boolean,
     override val reachingEndEdge: Boolean
 ) : IPagingListSegment<TPagingElement, PageOffsetPaginationPagingRequest, PageOffsetPaginationPagingListSegment<TPagingElement>>,
@@ -27,11 +27,11 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
             PageOffsetPaginationPagingListSegment<TPagingElement>
             > {
 
-        override fun createEmpty(initialPage: Int, countPerPage: Int): PageOffsetPaginationPagingListSegment<TPagingElement> {
+        override fun createEmpty(initialPage: Int, countPerRequest: Int): PageOffsetPaginationPagingListSegment<TPagingElement> {
             return PageOffsetPaginationPagingListSegment(
                 elements = emptyList(),
                 pages = listOf(initialPage),
-                countPerPage = countPerPage,
+                countPerRequest = countPerRequest,
                 reachingStartEdge = false,
                 reachingEndEdge = false
             )
@@ -45,7 +45,7 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
     override fun initialPagingRequest(): PageOffsetPaginationPagingRequest {
         return PageOffsetPaginationPagingRequest(
             page = pages.first(),
-            countPerPage = countPerPage
+            countPerRequest = countPerRequest
         )
     }
 
@@ -57,7 +57,7 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
         return PageOffsetPaginationPagingListSegment(
             elements = initialElements,
             pages = pages,
-            countPerPage = countPerPage,
+            countPerRequest = countPerRequest,
             reachingStartEdge = reachingStartEdge,
             reachingEndEdge = reachingEndEdge
         )
@@ -70,7 +70,7 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
     override fun previousPagingRequest(): PageOffsetPaginationPagingRequest {
         return PageOffsetPaginationPagingRequest(
             page = pages.first() - 1,
-            countPerPage = countPerPage
+            countPerRequest = countPerRequest
         )
     }
 
@@ -79,12 +79,12 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
         pagingRequest: PageOffsetPaginationPagingRequest
     ): PageOffsetPaginationPagingListSegment<TPagingElement> {
         check(pagingRequest.page == pages.first() - 1)
-        check(pagingRequest.countPerPage == countPerPage)
+        check(pagingRequest.countPerRequest == countPerRequest)
 
         return PageOffsetPaginationPagingListSegment(
             elements = previousElements + elements,
             pages = listOf(pagingRequest.page) + pages,
-            countPerPage = countPerPage,
+            countPerRequest = countPerRequest,
             reachingStartEdge = pagingRequest.page <= 1,
             reachingEndEdge = reachingEndEdge
         )
@@ -97,7 +97,7 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
     override fun nextPagingRequest(): PageOffsetPaginationPagingRequest {
         return PageOffsetPaginationPagingRequest(
             page = pages.last() + 1,
-            countPerPage = countPerPage
+            countPerRequest = countPerRequest
         )
     }
 
@@ -106,14 +106,14 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
         pagingRequest: PageOffsetPaginationPagingRequest
     ): PageOffsetPaginationPagingListSegment<TPagingElement> {
         check(pagingRequest.page == pages.last() + 1)
-        check(pagingRequest.countPerPage == countPerPage)
+        check(pagingRequest.countPerRequest == countPerRequest)
 
         return PageOffsetPaginationPagingListSegment(
             elements = elements + nextElements,
             pages = pages + listOf(pagingRequest.page),
-            countPerPage = countPerPage,
+            countPerRequest = countPerRequest,
             reachingStartEdge = reachingStartEdge,
-            reachingEndEdge = nextElements.size < countPerPage
+            reachingEndEdge = nextElements.size < countPerRequest
         )
     }
 
@@ -132,7 +132,7 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
         return PageOffsetPaginationPagingListSegment(
             elements = newElements,
             pages = newPages,
-            countPerPage = countPerPage,
+            countPerRequest = countPerRequest,
             reachingStartEdge = reachingStartEdge,
             reachingEndEdge = nextSegment.reachingEndEdge
         )

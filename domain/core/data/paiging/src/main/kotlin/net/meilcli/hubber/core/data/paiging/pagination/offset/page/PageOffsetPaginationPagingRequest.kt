@@ -4,5 +4,5 @@ import net.meilcli.hubber.core.data.paiging.IPagingRequest
 
 data class PageOffsetPaginationPagingRequest(
     val page: Int,
-    val countPerPage: Int
+    val countPerRequest: Int
 ) : IPagingRequest
