@@ -2,24 +2,20 @@ package net.meilcli.hubber.core.data.paiging
 
 interface IPagingListSegmentConnector<
     TPagingElement : IPagingElement,
-    TPagingRequest : IPagingRequest,
+    TPagingResult : IPagingResult<TPagingElement>,
     TPagingListSegment : IPagingListSegment<TPagingElement>
     > {
 
-    fun TPagingListSegment.createNewSegmentWithInitial(
-        initialElements: List<TPagingElement>,
-        reachingStartEdge: Boolean,
-        reachingEndEdge: Boolean
+    fun createNewSegment(
+        result: TPagingResult
     ): TPagingListSegment
 
     fun TPagingListSegment.createNewSegmentWithPrevious(
-        previousElements: List<TPagingElement>,
-        pagingRequest: TPagingRequest
+        result: TPagingResult
     ): TPagingListSegment
 
     fun TPagingListSegment.createNewSegmentWithNext(
-        nextElements: List<TPagingElement>,
-        pagingRequest: TPagingRequest
+        result: TPagingResult
     ): TPagingListSegment
 
     fun TPagingListSegment.needsConcat(nextSegment: TPagingListSegment): Boolean

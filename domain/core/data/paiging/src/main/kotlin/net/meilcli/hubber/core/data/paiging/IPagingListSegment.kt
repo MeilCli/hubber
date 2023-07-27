@@ -4,10 +4,9 @@ interface IPagingListSegment<TPagingElement : IPagingElement> : List<TPagingElem
 
     interface IPagingListSegmentFactory<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> {
 
-        fun createEmpty(initialPage: Int, countPerRequest: Int): TPagingListSegment
+        fun createEmpty(): TPagingListSegment
     }
 
-    val countPerRequest: Int
     val reachingStartEdge: Boolean
     val reachingEndEdge: Boolean
 }

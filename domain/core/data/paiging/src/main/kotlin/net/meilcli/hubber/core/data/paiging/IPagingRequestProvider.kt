@@ -6,9 +6,9 @@ interface IPagingRequestProvider<
     TPagingListSegment : IPagingListSegment<TPagingElement>
     > {
 
-    fun TPagingListSegment.needInitialLoad(): Boolean
+    val initialPagingRequest: TPagingRequest
 
-    fun TPagingListSegment.initialPagingRequest(): TPagingRequest
+    fun TPagingListSegment.needInitialLoad(): Boolean
 
     fun TPagingListSegment.canPrevious(): Boolean
 

@@ -6,7 +6,6 @@ import net.meilcli.hubber.core.data.paiging.IPagingListSegment
 class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> internal constructor(
     val elements: List<TPagingElement>,
     val pages: List<Int>,
-    override val countPerRequest: Int,
     override val reachingStartEdge: Boolean,
     override val reachingEndEdge: Boolean
 ) : IPagingListSegment<TPagingElement>,
@@ -22,11 +21,10 @@ class PageOffsetPaginationPagingListSegment<TPagingElement : IPagingElement> int
     class Factory<TPagingElement : IPagingElement> :
         IPagingListSegment.IPagingListSegmentFactory<TPagingElement, PageOffsetPaginationPagingListSegment<TPagingElement>> {
 
-        override fun createEmpty(initialPage: Int, countPerRequest: Int): PageOffsetPaginationPagingListSegment<TPagingElement> {
+        override fun createEmpty(): PageOffsetPaginationPagingListSegment<TPagingElement> {
             return PageOffsetPaginationPagingListSegment(
                 elements = emptyList(),
-                pages = listOf(initialPage),
-                countPerRequest = countPerRequest,
+                pages = emptyList(),
                 reachingStartEdge = false,
                 reachingEndEdge = false
             )

@@ -4,51 +4,46 @@ import net.meilcli.hubber.core.data.paiging.IPagingElement
 import net.meilcli.hubber.core.data.paiging.IPagingListSegmentConnector
 
 class PageOffsetPaginationPagingListSegmentConnector<TPagingElement : IPagingElement> :
-    IPagingListSegmentConnector<TPagingElement, PageOffsetPaginationPagingRequest, PageOffsetPaginationPagingListSegment<TPagingElement>> {
+    IPagingListSegmentConnector<
+        TPagingElement,
+        PageOffsetPaginationPagingResult<TPagingElement>,
+        PageOffsetPaginationPagingListSegment<TPagingElement>
+        > {
 
-    override fun PageOffsetPaginationPagingListSegment<TPagingElement>.createNewSegmentWithInitial(
-        initialElements: List<TPagingElement>,
-        reachingStartEdge: Boolean,
-        reachingEndEdge: Boolean
+    override fun createNewSegment(
+        result: PageOffsetPaginationPagingResult<TPagingElement>
     ): PageOffsetPaginationPagingListSegment<TPagingElement> {
         return PageOffsetPaginationPagingListSegment(
-            elements = initialElements,
-            pages = pages,
-            countPerRequest = countPerRequest,
-            reachingStartEdge = reachingStartEdge,
-            reachingEndEdge = reachingEndEdge
+            elements = result.elements,
+            pages = listOf(result.page),
+            reachingStartEdge = result.reachingStartEdge,
+            reachingEndEdge = result.reachingEndEdge
         )
     }
 
     override fun PageOffsetPaginationPagingListSegment<TPagingElement>.createNewSegmentWithPrevious(
-        previousElements: List<TPagingElement>,
-        pagingRequest: PageOffsetPaginationPagingRequest
+        result: PageOffsetPaginationPagingResult<TPagingElement>
     ): PageOffsetPaginationPagingListSegment<TPagingElement> {
-        check(pagingRequest.page == pages.first() - 1)
-        check(pagingRequest.countPerRequest == countPerRequest)
+        check(result.page == pages.first() - 1)
 
         return PageOffsetPaginationPagingListSegment(
-            elements = previousElements + elements,
-            pages = listOf(pagingRequest.page) + pages,
-            countPerRequest = countPerRequest,
-            reachingStartEdge = pagingRequest.page <= 1,
+            elements = result.elements + elements,
+            pages = listOf(result.page) + pages,
+            reachingStartEdge = result.reachingStartEdge,
             reachingEndEdge = reachingEndEdge
         )
     }
 
     override fun PageOffsetPaginationPagingListSegment<TPagingElement>.createNewSegmentWithNext(
-        nextElements: List<TPagingElement>,
-        pagingRequest: PageOffsetPaginationPagingRequest
+        result: PageOffsetPaginationPagingResult<TPagingElement>
     ): PageOffsetPaginationPagingListSegment<TPagingElement> {
-        check(pagingRequest.page == pages.last() + 1)
-        check(pagingRequest.countPerRequest == countPerRequest)
+        check(result.page == pages.last() + 1)
 
         return PageOffsetPaginationPagingListSegment(
-            elements = elements + nextElements,
-            pages = pages + listOf(pagingRequest.page),
-            countPerRequest = countPerRequest,
+            elements = elements + result.elements,
+            pages = pages + listOf(result.page),
             reachingStartEdge = reachingStartEdge,
-            reachingEndEdge = nextElements.size < countPerRequest
+            reachingEndEdge = result.reachingEndEdge
         )
     }
 
@@ -69,7 +64,6 @@ class PageOffsetPaginationPagingListSegmentConnector<TPagingElement : IPagingEle
         return PageOffsetPaginationPagingListSegment(
             elements = newElements,
             pages = newPages,
-            countPerRequest = countPerRequest,
             reachingStartEdge = reachingStartEdge,
             reachingEndEdge = nextSegment.reachingEndEdge
         )
