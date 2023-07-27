@@ -1,22 +1,15 @@
 package net.meilcli.hubber.core.data.paiging
 
-interface IPagingList<
-    TPagingElement : IPagingElement,
-    TPagingRequest : IPagingRequest,
-    TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>
-    > : List<TPagingElement> {
+interface IPagingList<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> : List<TPagingElement> {
 
     interface IPagingListFactory<
         TPagingElement : IPagingElement,
-        TPagingRequest : IPagingRequest,
-        TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>,
-        TPagingList : IPagingList<TPagingElement, TPagingRequest, TPagingListSegment>
+        TPagingListSegment : IPagingListSegment<TPagingElement>,
+        TPagingList : IPagingList<TPagingElement, TPagingListSegment>
         > {
 
         fun createEmpty(
             emptySegment: TPagingListSegment
         ): TPagingList
     }
-
-    fun needInitialLoad(): Boolean
 }

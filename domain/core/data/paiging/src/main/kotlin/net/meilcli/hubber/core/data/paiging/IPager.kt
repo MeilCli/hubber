@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.Flow
 interface IPager<
     TPagingElement : IPagingElement,
     TPagingRequest : IPagingRequest,
-    TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>,
-    TPagingList : IPagingList<TPagingElement, TPagingRequest, TPagingListSegment>
+    TPagingListSegment : IPagingListSegment<TPagingElement>,
+    TPagingList : IPagingList<TPagingElement, TPagingListSegment>
     > {
 
     suspend fun loadInitial(

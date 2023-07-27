@@ -4,46 +4,42 @@ import net.meilcli.hubber.core.data.paiging.IPagingElement
 import net.meilcli.hubber.core.data.paiging.IPagingList
 import net.meilcli.hubber.core.data.paiging.IPagingListSegment
 import net.meilcli.hubber.core.data.paiging.IPagingRequest
+import net.meilcli.hubber.core.data.paiging.IPagingRequestProvider
 
 class SingleSegmentationPagingList<
     TPagingElement : IPagingElement,
-    TPagingRequest : IPagingRequest,
-    TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>
+    TPagingListSegment : IPagingListSegment<TPagingElement>
     > internal constructor(
     internal val segment: TPagingListSegment
-) : IPagingList<TPagingElement, TPagingRequest, TPagingListSegment>, List<TPagingElement> by segment {
+) : IPagingList<TPagingElement, TPagingListSegment>, List<TPagingElement> by segment {
 
     companion object {
 
         fun <
             TPagingElement : IPagingElement,
-            TPagingRequest : IPagingRequest,
-            TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>
-            > factory(): Factory<TPagingElement, TPagingRequest, TPagingListSegment> {
+            TPagingListSegment : IPagingListSegment<TPagingElement>
+            > factory(): Factory<TPagingElement, TPagingListSegment> {
             return Factory()
         }
     }
 
-    class Factory<
-        TPagingElement : IPagingElement,
-        TPagingRequest : IPagingRequest,
-        TPagingListSegment : IPagingListSegment<TPagingElement, TPagingRequest, TPagingListSegment>
-        > :
+    class Factory<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> :
         IPagingList.IPagingListFactory<
             TPagingElement,
-            TPagingRequest,
             TPagingListSegment,
-            SingleSegmentationPagingList<TPagingElement, TPagingRequest, TPagingListSegment>
+            SingleSegmentationPagingList<TPagingElement, TPagingListSegment>
             > {
 
         override fun createEmpty(
             emptySegment: TPagingListSegment
-        ): SingleSegmentationPagingList<TPagingElement, TPagingRequest, TPagingListSegment> {
+        ): SingleSegmentationPagingList<TPagingElement, TPagingListSegment> {
             return SingleSegmentationPagingList(emptySegment)
         }
     }
 
-    override fun needInitialLoad(): Boolean {
-        return segment.needInitialLoad()
+    fun <TPagingRequest : IPagingRequest> needInitialLoad(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>
+    ): Boolean {
+        return with(pagingRequestProvider) { segment.needInitialLoad() }
     }
 }
