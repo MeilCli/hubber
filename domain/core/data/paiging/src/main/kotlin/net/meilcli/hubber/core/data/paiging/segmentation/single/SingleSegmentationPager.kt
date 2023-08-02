@@ -21,6 +21,7 @@ class SingleSegmentationPager<
 ) :
     IPager<
         TPagingElement,
+        SingleSegmentationPagingRequestParameter<TPagingElement, TPagingListSegment>,
         TPagingResult,
         TPagingListSegment,
         SingleSegmentationPagingList<TPagingElement, TPagingListSegment>
@@ -40,30 +41,30 @@ class SingleSegmentationPager<
             }
     }
 
-    override suspend fun <TPagingRequest : IPagingRequest> loadInitial(
+    private suspend fun <TPagingRequest : IPagingRequest> loadInitial(
         pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
     ): Flow<SingleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
         return firstLoad(pagingRequestProvider, pagingSource, forceRefresh = false)
     }
 
-    override suspend fun <TPagingRequest : IPagingRequest> loadRefresh(
+    private suspend fun <TPagingRequest : IPagingRequest> loadRefresh(
         pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
     ): Flow<SingleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
         return firstLoad(pagingRequestProvider, pagingSource, forceRefresh = true)
     }
 
-    override suspend fun <TPagingRequest : IPagingRequest> loadPrevious(
+    private suspend fun <TPagingRequest : IPagingRequest> loadPrevious(
         pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
-        pagingList: SingleSegmentationPagingList<TPagingElement, TPagingListSegment>
+        pagingRequestParameter: SingleSegmentationPagingRequestParameter.Previous<TPagingElement, TPagingListSegment>
     ): Flow<SingleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
-        if (pagingList.needInitialLoad(pagingRequestProvider)) {
+        if (pagingRequestParameter.pagingList.needInitialLoad(pagingRequestProvider)) {
             return loadInitial(pagingRequestProvider, pagingSource)
         }
 
-        val segment = pagingList.segment
+        val segment = pagingRequestParameter.segment
         if (with(pagingRequestProvider) { segment.canPrevious().not() }) {
             return emptyFlow()
         }
@@ -79,16 +80,16 @@ class SingleSegmentationPager<
             }
     }
 
-    override suspend fun <TPagingRequest : IPagingRequest> loadNext(
+    private suspend fun <TPagingRequest : IPagingRequest> loadNext(
         pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
-        pagingList: SingleSegmentationPagingList<TPagingElement, TPagingListSegment>
+        pagingRequestParameter: SingleSegmentationPagingRequestParameter.Next<TPagingElement, TPagingListSegment>
     ): Flow<SingleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
-        if (pagingList.needInitialLoad(pagingRequestProvider)) {
+        if (pagingRequestParameter.pagingList.needInitialLoad(pagingRequestProvider)) {
             return loadInitial(pagingRequestProvider, pagingSource)
         }
 
-        val segment = pagingList.segment
+        val segment = pagingRequestParameter.segment
         if (with(pagingRequestProvider) { segment.canNext().not() }) {
             return emptyFlow()
         }
@@ -102,5 +103,26 @@ class SingleSegmentationPager<
                     )
                 }
             }
+    }
+
+    override suspend fun <TPagingRequest : IPagingRequest> load(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
+        pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
+        pagingRequestParameter: SingleSegmentationPagingRequestParameter<TPagingElement, TPagingListSegment>
+    ): Flow<SingleSegmentationPagingList<TPagingElement, TPagingListSegment>> {
+        return when (pagingRequestParameter) {
+            is SingleSegmentationPagingRequestParameter.Initial -> loadInitial(pagingRequestProvider, pagingSource)
+            is SingleSegmentationPagingRequestParameter.Refresh -> loadRefresh(pagingRequestProvider, pagingSource)
+            is SingleSegmentationPagingRequestParameter.Previous -> loadPrevious(
+                pagingRequestProvider,
+                pagingSource,
+                pagingRequestParameter
+            )
+            is SingleSegmentationPagingRequestParameter.Next -> loadNext(
+                pagingRequestProvider,
+                pagingSource,
+                pagingRequestParameter
+            )
+        }
     }
 }

@@ -10,7 +10,7 @@ class SingleSegmentationPagingList<
     TPagingElement : IPagingElement,
     TPagingListSegment : IPagingListSegment<TPagingElement>
     > internal constructor(
-    internal val segment: TPagingListSegment
+    private val segment: TPagingListSegment
 ) : IPagingList<TPagingElement, TPagingListSegment>, List<TPagingElement> by segment {
 
     companion object {
@@ -37,9 +37,52 @@ class SingleSegmentationPagingList<
         }
     }
 
+    sealed class ElementOrRequest<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>> {
+
+        data class Element<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>>(
+            val value: TPagingElement
+        ) : ElementOrRequest<TPagingElement, TPagingListSegment>()
+
+        data class Request<TPagingElement : IPagingElement, TPagingListSegment : IPagingListSegment<TPagingElement>>(
+            val value: SingleSegmentationPagingRequestParameter<TPagingElement, TPagingListSegment>
+        ) : ElementOrRequest<TPagingElement, TPagingListSegment>()
+    }
+
     fun <TPagingRequest : IPagingRequest> needInitialLoad(
         pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>
     ): Boolean {
         return with(pagingRequestProvider) { segment.needInitialLoad() }
+    }
+
+    fun initialRequestParameter(): SingleSegmentationPagingRequestParameter.Initial<TPagingElement, TPagingListSegment> {
+        return SingleSegmentationPagingRequestParameter.Initial()
+    }
+
+    fun refreshRequestParameter(): SingleSegmentationPagingRequestParameter.Refresh<TPagingElement, TPagingListSegment> {
+        return SingleSegmentationPagingRequestParameter.Refresh()
+    }
+
+    fun previousRequestParameter(): SingleSegmentationPagingRequestParameter.Previous<TPagingElement, TPagingListSegment> {
+        return SingleSegmentationPagingRequestParameter.Previous(this, segment)
+    }
+
+    fun nextRequestParameter(): SingleSegmentationPagingRequestParameter.Next<TPagingElement, TPagingListSegment> {
+        return SingleSegmentationPagingRequestParameter.Next(this, segment)
+    }
+
+    fun elementOfRequests(): List<ElementOrRequest<TPagingElement, TPagingListSegment>> {
+        val result = mutableListOf<ElementOrRequest<TPagingElement, TPagingListSegment>>()
+
+        if (segment.reachingStartEdge.not()) {
+            result += ElementOrRequest.Request(previousRequestParameter())
+        }
+        for (element in segment) {
+            result += ElementOrRequest.Element(element)
+        }
+        if (segment.reachingEndEdge.not()) {
+            result += ElementOrRequest.Request(nextRequestParameter())
+        }
+
+        return result
     }
 }

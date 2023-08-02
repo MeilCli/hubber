@@ -4,30 +4,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface IPager<
     TPagingElement : IPagingElement,
+    TPagingRequestParameter : IPagingRequestParameter,
     TPagingResult : IPagingResult<TPagingElement>,
     TPagingListSegment : IPagingListSegment<TPagingElement>,
     TPagingList : IPagingList<TPagingElement, TPagingListSegment>
     > {
 
-    suspend fun <TPagingRequest : IPagingRequest> loadInitial(
-        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
-        pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
-    ): Flow<TPagingList>
-
-    suspend fun <TPagingRequest : IPagingRequest> loadRefresh(
-        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
-        pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>
-    ): Flow<TPagingList>
-
-    suspend fun <TPagingRequest : IPagingRequest> loadPrevious(
-        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
+    suspend fun <TPagingRequest : IPagingRequest> load(
+        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingRequestParameter, TPagingListSegment>,
         pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
-        pagingList: TPagingList
-    ): Flow<TPagingList>
-
-    suspend fun <TPagingRequest : IPagingRequest> loadNext(
-        pagingRequestProvider: IPagingRequestProvider<TPagingElement, TPagingRequest, TPagingListSegment>,
-        pagingSource: IPagingSource<TPagingElement, TPagingRequest, TPagingResult>,
-        pagingList: TPagingList
+        pagingRequestParameter: TPagingRequestParameter
     ): Flow<TPagingList>
 }
